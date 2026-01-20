@@ -9,24 +9,22 @@
 class Rectangle : public Shape
 {
 public:
-    // Constructeur sans texture
-    Rectangle(Shader* shader_program, float width = 2.0f, float height = 1.0f);
-
-    // Constructeur avec texture (comme TexturedSphere)
-    Rectangle(Shader* shader_program, Texture* texture, float width = 2.0f, float height = 1.0f);
+    // Rectangle avec épaisseur (3D)
+    Rectangle(Shader* shader_program, float width = 2.0f, float height = 1.0f, float thickness = 0.1f);
+    Rectangle(Shader* shader_program, Texture* texture, float width = 2.0f, float height = 1.0f, float thickness = 0.1f);
 
     virtual ~Rectangle();
 
     void draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) override;
 
 private:
-    void initRectangle(float width, float height);
+    void initRectangle3D(float width, float height, float thickness);
 
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
-    Texture* texture_ = nullptr;
-    bool has_texture_ = false;
+    Texture* texture_;
+    bool has_texture_;
     unsigned int vertex_count;
 };
 

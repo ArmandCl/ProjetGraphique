@@ -40,9 +40,8 @@ int main()
     viewer.scene_root->add(sphere_node);
 
     // === BUREAU ===
-    // Plateau du bureau
-    Shape* desk_top = new Rectangle(texture_shader, wood_texture, 2.0f, 1.0f);
-    glm::mat4 desk_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -0.5f, -3.0f))
+    Shape* desk_top = new Rectangle(texture_shader, wood_texture, 2.0f, 1.0f, 0.1f);
+    glm::mat4 desk_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -0.8f, -3.0f))
         * glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
     Node* desk_node = new Node(desk_mat);
