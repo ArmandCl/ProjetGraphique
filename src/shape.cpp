@@ -16,4 +16,8 @@ void Shape::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) {
 
     loc = glGetUniformLocation(this->shader_program_, "projection");
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(projection));
+
+    glUniformMatrix4fv(glGetUniformLocation(shader_program_, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    glUniformMatrix4fv(glGetUniformLocation(shader_program_, "view"), 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(glGetUniformLocation(shader_program_, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 }
