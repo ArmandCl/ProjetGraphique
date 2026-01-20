@@ -361,3 +361,50 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+
+# Builds CMake
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+*.cmake
+
+# Exécutables et libs générés
+*.exe
+*.out
+*.app
+*.dll
+*.so
+*.dylib
+*.lib
+*.a
+
+# Shaders compilés (si vous compilez vos shaders)
+*.spv
+*.cso
+*.bin
+
+# Cache VS Code (si vous l'utilisez aussi)
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Cache CLion (si jamais)
+.idea/
+
+# Fichiers macOS
+.DS_Store
+
+# Fichiers temporaires divers
+*~
+*.swp
+*.swo
