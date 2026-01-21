@@ -11,7 +11,7 @@ bool keys[1024] = { false };
 
 Viewer::Viewer(int width, int height)
     : window_width(width), window_height(height),
-    camera_position(0.0f, 0.0f, 3.0f),
+    camera_position(0.0f, 0.0f, 0.0f),
     camera_front(0.0f, 0.0f, -1.0f),
     world_up(0.0f, 1.0f, 0.0f),
     camera_up(0.0f, 1.0f, 0.0f),

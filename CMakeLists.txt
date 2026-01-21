@@ -47,5 +47,5 @@ set(LIBS ${LIBS} glfw)
 add_subdirectory(${GLM_DIR})
 
 # Executable
-add_executable(opengl_program ${SOURCES} "include/rectangle.h" "src/rectangle.cpp")
+add_executable(opengl_program ${SOURCES} "include/rectangle.h" "src/rectangle.cpp" "include/room.h" "src/room.cpp")
 target_link_libraries(opengl_program ${LIBS})
