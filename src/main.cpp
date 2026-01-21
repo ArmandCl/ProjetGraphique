@@ -22,26 +22,30 @@ int main()
     Shader* texture_shader = new Shader(shader_dir + "texture.vert", shader_dir + "texture.frag");
 
     // Textures pour la pièce
-    // NOTE: Tu dois créer ces fichiers ou utiliser des textures existantes
     Texture* floor_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\floor.jpg");
-    Texture* wall_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\wall.jpg");  // Utilise wood.jpg temporairement
-    Texture* ceiling_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\wood.jpg"); // Utilise wood.jpg temporairement
-    Texture* wood_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\wood.jpg");     // Texture bois pour le bureau
+    Texture* wall_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\wall.jpg");
+    Texture* ceiling_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\wood.jpg");
+    Texture* wood_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\wood.jpg");
 
     // Texture métal pour les pieds
     Texture* metal_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\metal.jpg");
 
-    // === PIÈCE COMPLÈTE ===
+    // === PIÈCE COMPLÈTE (plus carrée) ===
+    float scale_factor = 0.35f; // Réduction de 65% = 35% de la taille originale
+    float room_width = 5.0f * scale_factor;   // largeur: 1.75
+    float room_height = 4.0f * scale_factor;  // hauteur: 1.4
+    float room_depth = 5.0f * scale_factor;   // profondeur: 1.75 (plus carré!)
+
     Shape* room = new Room(texture_shader,
         floor_texture,
         wall_texture,
         ceiling_texture,
-        5.0f,  // largeur
-        4.0f,  // hauteur
-        8.0f); // profondeur
+        room_width,
+        room_height,
+        room_depth);
 
     // La pièce est centrée à l'origine
-    glm::mat4 room_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+    glm::mat4 room_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.875f)); // Centre ajusté
     Node* room_node = new Node(room_mat);
     room_node->add(room);
     viewer.scene_root->add(room_node);
@@ -49,20 +53,21 @@ int main()
     // === SPHÈRE AVEC LUMIÈRE ===
     Shader* phong_shader = new Shader(shader_dir + "phong.vert", shader_dir + "phong.frag");
     Shape* sphere = new LightingSphere(phong_shader,
-        glm::vec3(0.0f, 2.0f, 2.0f),  // Position lumière (dans la pièce)
+        glm::vec3(0.0f, 0.7f, 0.3f),  // Position lumière ajustée
         glm::vec3(1.0f, 1.0f, 1.0f),  // Couleur lumière
         glm::vec3(0.2f, 0.5f, 0.8f)); // Couleur objet
 
-    glm::mat4 sphere_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.5f, -3.0f))
-        * glm::scale(glm::mat4(1.0f), glm::vec3(0.3f, 0.3f, 0.3f));
+    glm::mat4 sphere_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.175f, -0.875f)) // Ajusté
+        * glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f)); // Plus petite
 
     Node* sphere_node = new Node(sphere_mat);
     sphere_node->add(sphere);
     viewer.scene_root->add(sphere_node);
 
     // === BUREAU (dans la pièce) ===
-    Shape* desk_top = new Rectangle(texture_shader, wood_texture, 2.0f, 1.0f, 0.1f);
-    glm::mat4 desk_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, -1.4f, -6.499f))
+    Shape* desk_top = new Rectangle(texture_shader, wood_texture, 2.0f * scale_factor, 1.0f * scale_factor, 0.1f * scale_factor);
+    // Collé au mur arrière (qui est maintenant à Z = -0.875 - 0.875 = -1.75)
+    glm::mat4 desk_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.49f, -1.58f)) // Juste devant le mur arrière
         * glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
     Node* desk_node = new Node(desk_mat);
@@ -70,21 +75,18 @@ int main()
     viewer.scene_root->add(desk_node);
 
     // === PIEDS DE BUREAU ===
-    float leg_height = 0.7f;
-    float leg_radius = 0.05f;
+    float leg_height = 0.7f * scale_factor;  // 0.245
+    float leg_radius = 0.05f * scale_factor; // 0.0175
     int slices = 32;
 
-    // Positions des pieds (ajustées pour que le bureau touche le sol)
     std::vector<glm::vec3> leg_positions = {
-        // Pieds avant (côté centre de la pièce) : Z = position_bureau + petit offset
-        glm::vec3(-2.35f, -1.75f, -6.1f),   // Avant gauche (Z = -6.5 + 0.1)
+        // Pieds "avant" (côté centre) - les DEUX du même côté
+        glm::vec3(-0.8225f, -0.6125f, -1.45f),   // Gauche avant
+        glm::vec3(-0.2275f, -0.6125f, -1.45f),   // Droite avant
 
-        glm::vec3(-0.65f, -1.75f, -6.1f),   // Avant droit (Z = -6.5 + 0.1)
-
-        // Pieds arrière (côté mur) : Z = position_bureau - plus grand offset
-        glm::vec3(-2.35f, -1.75f, -6.9f),   // Arrière gauche (Z = -6.5 - 0.4) - proche du mur
-
-        glm::vec3(-0.65f, -1.75f, -6.9f)    // Arrière droit (Z = -6.5 - 0.4) - proche du mur
+        // Pieds "arrière" (côté mur) - mais pas trop loin
+        glm::vec3(-0.8225f, -0.6125f, -1.71f),   // Gauche arrière
+        glm::vec3(-0.2275f, -0.6125f, -1.71f)    // Droite arrière
     };
 
     for (const auto& pos : leg_positions) {
@@ -98,19 +100,21 @@ int main()
         viewer.scene_root->add(leg_node);
     }
 
-
     // === AFFICHE SUR LE MUR ===
-    // Crée une texture pour l'affiche
     Texture* poster_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\poster.jpg");
 
-    // Crée un rectangle mince pour l'affiche (comme un tableau/cadre)
-    Shape* poster = new Rectangle(texture_shader, poster_texture, 1.0f, 1.5f, 0.02f); // Largeur 1.5, hauteur 2.0, épaisseur 0.02
+    // Affiche plus petite proportionnellement
+    Shape* poster = new Rectangle(texture_shader, poster_texture, 0.8f * scale_factor, 1.0f * scale_factor, 0.02f * scale_factor);
 
-    // Position sur le mur droit (X = +4.0 pour être sur le mur, Y à hauteur des yeux, Z au milieu)
-    glm::mat4 poster_mat = glm::translate(glm::mat4(1.0f), glm::vec3(3.95f, 0.0f, -3.0f))  // Presque collé au mur droit
-        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f)) // Tourné pour faire face à l'intérieur
-        *glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Rotation supplémentaire de 180° sur X
+    // Position CORRIGÉE : sur le mur droit, à l'intérieur de la pièce
+    // Mur droit est à X = room_width/2 = 0.875
+    // On met l'affiche légèrement à l'intérieur : X = 0.875 - 0.01 = 0.865
+    // À hauteur des yeux : Y = 0.0
+    // Au milieu en Z : Z = centre de la pièce = -0.875
 
+    glm::mat4 poster_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.865f, 0.0f, -0.875f))  // SUR le mur droit
+        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f))      // Tourné vers l'intérieur
+        * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));    // Correction verticale
 
     Node* poster_node = new Node(poster_mat);
     poster_node->add(poster);
