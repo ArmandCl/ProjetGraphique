@@ -1,13 +1,14 @@
 #version 330 core
 layout (location = 0) in vec3 position;
-layout (location = 1) in vec3 aNormal;
+layout (location = 1) in vec2 aTexCoords; // On reçoit les UVs sur le 1
+layout (location = 2) in vec3 aNormal;    // On reçoit les Normales sur le 2
 
 out vec3 FragPos;
 out vec3 Normal;
 out vec3 LightPos;
+out vec2 TexCoords; // On prépare l'envoi vers le fragment shader
 
-uniform vec3 lightPos; // we now define the uniform in the vertex shader and pass the 'view space' lightpos to the fragment shader. lightPos is currently in world space.
-
+uniform vec3 lightPos;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
@@ -17,5 +18,6 @@ void main()
     gl_Position = projection * view * model * vec4(position, 1.0);
     FragPos = vec3(view * model * vec4(position, 1.0));
     Normal = mat3(transpose(inverse(view * model))) * aNormal;
-    LightPos = vec3(view * vec4(lightPos, 1.0)); // Transform world-space light position to view-space light position
+    LightPos = vec3(view * vec4(lightPos, 1.0));
+    TexCoords = aTexCoords; // Passage des coordonnées
 }

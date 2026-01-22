@@ -6,6 +6,7 @@
 #include "shader.h"
 #include "rectangle.h"
 #include "cylinder.h"
+#include "mesh.h"
 #include "room.h"
 #include <string>
 
@@ -51,13 +52,15 @@ int main()
     viewer.scene_root->add(room_node);
 
     // === SPHÈRE AVEC LUMIÈRE ===
-    Shader* phong_shader = new Shader(shader_dir + "phong.vert", shader_dir + "phong.frag");
-    Shape* sphere = new LightingSphere(phong_shader,
-        glm::vec3(0.0f, 0.7f, 0.3f),  // Position lumière ajustée
+    Shader* phong_color_shader = new Shader(shader_dir + "phong.vert", shader_dir + "phong_color.frag");
+    Shader* phong_texture_shader = new Shader(shader_dir + "phong.vert", shader_dir + "phong.frag");
+    // On change le dernier paramètre (object_color) en blanc
+    Shape* sphere = new LightingSphere(phong_color_shader,
+        glm::vec3(0.0f, 0.7f, 0.3f),  // Position lumière
         glm::vec3(1.0f, 1.0f, 1.0f),  // Couleur lumière
-        glm::vec3(0.2f, 0.5f, 0.8f)); // Couleur objet
+        glm::vec3(1.0f, 1.0f, 1.0f)); // Couleur de l'ampoule (BLANC)
 
-    glm::mat4 sphere_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.175f, -0.875f)) // Ajusté
+    glm::mat4 sphere_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.35f, -0.875f)) // Ajusté
         * glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f)); // Plus petite
 
     Node* sphere_node = new Node(sphere_mat);
@@ -106,11 +109,6 @@ int main()
     // Affiche plus petite proportionnellement
     Shape* poster = new Rectangle(texture_shader, poster_texture, 0.8f * scale_factor, 1.0f * scale_factor, 0.02f * scale_factor);
 
-    // Position CORRIGÉE : sur le mur droit, à l'intérieur de la pièce
-    // Mur droit est à X = room_width/2 = 0.875
-    // On met l'affiche légèrement à l'intérieur : X = 0.875 - 0.01 = 0.865
-    // À hauteur des yeux : Y = 0.0
-    // Au milieu en Z : Z = centre de la pièce = -0.875
 
     glm::mat4 poster_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.865f, 0.0f, -0.875f))  // SUR le mur droit
         * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f))      // Tourné vers l'intérieur
@@ -120,11 +118,31 @@ int main()
     poster_node->add(poster);
     viewer.scene_root->add(poster_node);
 
+
+
+    Mesh* monModele = new Mesh(phong_texture_shader, "C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\models\\lamp.obj", metal_texture);
+
+    // Intégration au graphe de scène
+    glm::mat4 mesh_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.7f, -0.875f))
+        * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+
+    Node* mesh_node = new Node(mesh_mat);
+    mesh_node->add(monModele);
+    viewer.scene_root->add(mesh_node);
+
+    GLuint texShaderID = phong_texture_shader->get_id();
+    glUseProgram(texShaderID);
+
+    // On envoie la position et la couleur de la lumière (les mêmes que la sphère)
+    glUniform3f(glGetUniformLocation(texShaderID, "lightPos"), 0.0f, 0.7f, 0.3f);
+    glUniform3f(glGetUniformLocation(texShaderID, "lightColor"), 1.0f, 1.0f, 1.0f);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     viewer.run();
 
     // Nettoyage
     delete texture_shader;
-    delete phong_shader;
     delete wood_texture;
     delete metal_texture;
     delete floor_texture;
