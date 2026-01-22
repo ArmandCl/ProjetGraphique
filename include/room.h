@@ -24,6 +24,10 @@ public:
     virtual ~Room();
 
     void draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) override;
+    void setLight(glm::vec3 pos, glm::vec3 color) {
+        lightPos = pos;
+        lightColor = color;
+    }
 
 private:
     void initRoom(float width, float height, float depth);
@@ -44,6 +48,9 @@ private:
     Texture* floor_texture_;
     Texture* wall_texture_;
     Texture* ceiling_texture_;
+
+    glm::vec3 lightPos;
+    glm::vec3 lightColor;
 };
 
 #endif // ROOM_H

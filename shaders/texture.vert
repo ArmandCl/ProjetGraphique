@@ -6,6 +6,7 @@ uniform mat4 projection;
 
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec2 tex_coords;  
+layout (location = 2) in vec3 aNormal; // Ajoute cette ligne même si inutilisée
 
 out vec2 frag_tex_coords;
 

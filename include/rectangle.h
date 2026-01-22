@@ -16,6 +16,10 @@ public:
     virtual ~Rectangle();
 
     void draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) override;
+    void setLight(glm::vec3 pos, glm::vec3 color) {
+        lightPos = pos;
+        lightColor = color;
+    }
 
 private:
     void initRectangle3D(float width, float height, float thickness);
@@ -26,6 +30,8 @@ private:
     Texture* texture_;
     bool has_texture_;
     unsigned int vertex_count;
+    glm::vec3 lightPos;
+    glm::vec3 lightColor;
 };
 
 #endif // RECTANGLE_H

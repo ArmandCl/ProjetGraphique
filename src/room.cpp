@@ -256,7 +256,9 @@ void Room::initRoom(float width, float height, float depth) {
 
 void Room::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) {
     glUseProgram(this->shader_program_);
-
+    // Envoi de la lumière
+    glUniform3f(glGetUniformLocation(this->shader_program_, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
+    glUniform3f(glGetUniformLocation(this->shader_program_, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
     for (auto& wall : walls) {
         if (has_textures_ && wall.texture != nullptr) {
             glActiveTexture(GL_TEXTURE0);

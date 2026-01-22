@@ -4,34 +4,30 @@ out vec4 FragColor;
 in vec3 FragPos;
 in vec3 Normal;
 in vec3 LightPos;
-in vec2 TexCoords; // Reçu du vertex shader
+in vec2 TexCoords;
 
 uniform vec3 lightColor;
-uniform sampler2D diffuse_map; // Ta texture métal
+uniform sampler2D diffuse_map;
 
 void main()
 {
-    // On récupère la couleur de la texture à ces coordonnées
-    vec3 texColor = texture(diffuse_map, TexCoords).rgb;
+    // 1. Paramètres de lumière (sans le 'f')
+    float ambientIntensity = 0.2; 
+    float diffuseIntensity = 0.8;
 
-    // Ambient
-    float ambientStrength = 0.2;
-    vec3 ambient = ambientStrength * lightColor;
+    // 2. Ambiant
+    vec3 ambient = ambientIntensity * lightColor;
 
-    // Diffuse 
+    // 3. Diffus (Calcul des normales)
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(LightPos - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * lightColor;
-    
-    // Specular (éclat brillant du métal)
-    float specularStrength = 0.5;
-    vec3 viewDir = normalize(-FragPos);
-    vec3 reflectDir = reflect(-lightDir, norm);  
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-    vec3 specular = specularStrength * spec * lightColor;
-    
-    // Le résultat final est la somme des lumières * la couleur de la texture
-    vec3 result = (ambient + diffuse + specular) * texColor;
+    vec3 diffuse = diff * diffuseIntensity * lightColor;
+
+    // 4. Texture
+    vec3 texColor = texture(diffuse_map, TexCoords).rgb;
+
+    // 5. Combinaison finale
+    vec3 result = (ambient + diffuse) * texColor;
     FragColor = vec4(result, 1.0);
 }

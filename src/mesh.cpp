@@ -42,6 +42,11 @@ Mesh::Mesh(Shader* shader, const char* objPath, Texture* texture)
 void Mesh::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) {
     glUseProgram(this->shader_program_);
 
+    // --- AJOUTE CECI ICI ---
+    glUniform3f(glGetUniformLocation(this->shader_program_, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
+    glUniform3f(glGetUniformLocation(this->shader_program_, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
+    // -----------------------
+
     if (has_texture_ && texture_) {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture_->getGLid());

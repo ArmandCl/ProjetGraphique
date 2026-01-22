@@ -11,7 +11,7 @@ uniform vec3 objectColor; // On réutilise la couleur unie
 void main()
 {
     // Augmente ambientStrength à 0.8 ou 1.0 pour l'effet "ampoule allumée"
-    float ambientStrength = 0.9;
+    float ambientStrength = 0.7;
     vec3 ambient = ambientStrength * lightColor;
 
     // Diffuse 

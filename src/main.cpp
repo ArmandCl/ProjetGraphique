@@ -21,6 +21,8 @@ int main()
 
     // Shader pour les objets texturés
     Shader* texture_shader = new Shader(shader_dir + "texture.vert", shader_dir + "texture.frag");
+    Shader* phong_color_shader = new Shader(shader_dir + "phong.vert", shader_dir + "phong_color.frag");
+    Shader* phong_texture_shader = new Shader(shader_dir + "phong.vert", shader_dir + "phong.frag");
 
     // Textures pour la pièce
     Texture* floor_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\floor.jpg");
@@ -37,7 +39,7 @@ int main()
     float room_height = 4.0f * scale_factor;  // hauteur: 1.4
     float room_depth = 5.0f * scale_factor;   // profondeur: 1.75 (plus carré!)
 
-    Shape* room = new Room(texture_shader,
+    Shape* room = new Room(phong_texture_shader,
         floor_texture,
         wall_texture,
         ceiling_texture,
@@ -52,8 +54,7 @@ int main()
     viewer.scene_root->add(room_node);
 
     // === SPHÈRE AVEC LUMIÈRE ===
-    Shader* phong_color_shader = new Shader(shader_dir + "phong.vert", shader_dir + "phong_color.frag");
-    Shader* phong_texture_shader = new Shader(shader_dir + "phong.vert", shader_dir + "phong.frag");
+
     // On change le dernier paramètre (object_color) en blanc
     Shape* sphere = new LightingSphere(phong_color_shader,
         glm::vec3(0.0f, 0.7f, 0.3f),  // Position lumière
@@ -68,7 +69,7 @@ int main()
     viewer.scene_root->add(sphere_node);
 
     // === BUREAU (dans la pièce) ===
-    Shape* desk_top = new Rectangle(texture_shader, wood_texture, 2.0f * scale_factor, 1.0f * scale_factor, 0.1f * scale_factor);
+    Shape* desk_top = new Rectangle(phong_texture_shader, wood_texture, 2.0f * scale_factor, 1.0f * scale_factor, 0.1f * scale_factor);
     // Collé au mur arrière (qui est maintenant à Z = -0.875 - 0.875 = -1.75)
     glm::mat4 desk_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.49f, -1.58f)) // Juste devant le mur arrière
         * glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -107,7 +108,7 @@ int main()
     Texture* poster_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\poster.jpg");
 
     // Affiche plus petite proportionnellement
-    Shape* poster = new Rectangle(texture_shader, poster_texture, 0.8f * scale_factor, 1.0f * scale_factor, 0.02f * scale_factor);
+    Shape* poster = new Rectangle(phong_texture_shader, poster_texture, 0.8f * scale_factor, 1.0f * scale_factor, 0.02f * scale_factor);
 
 
     glm::mat4 poster_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.865f, 0.0f, -0.875f))  // SUR le mur droit
@@ -120,25 +121,30 @@ int main()
 
 
 
-    Mesh* monModele = new Mesh(phong_texture_shader, "C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\models\\lamp.obj", metal_texture);
+    Mesh* lamp = new Mesh(phong_texture_shader, "C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\models\\lamp.obj", wood_texture);
 
     // Intégration au graphe de scène
     glm::mat4 mesh_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.7f, -0.875f))
         * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 
     Node* mesh_node = new Node(mesh_mat);
-    mesh_node->add(monModele);
+    mesh_node->add(lamp);
     viewer.scene_root->add(mesh_node);
 
     GLuint texShaderID = phong_texture_shader->get_id();
-    glUseProgram(texShaderID);
+    lamp->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
+    
+    
+    // 1. Définir les paramètres une seule fois
+    glm::vec3 lp(0.0f, 0.7f, -0.875f);
+    glm::vec3 lc(1.0f, 1.0f, 1.0f);
+    // 2. Envoyer à tous les objets (Casting nécessaire pour Shape*)
+    lamp->setLight(lp, lc);
+    ((Rectangle*)desk_top)->setLight(lp, lc);
+    ((Room*)room)->setLight(lp, lc);
+    ((Rectangle*)poster)->setLight(lp, lc);
 
-    // On envoie la position et la couleur de la lumière (les mêmes que la sphère)
-    glUniform3f(glGetUniformLocation(texShaderID, "lightPos"), 0.0f, 0.7f, 0.3f);
-    glUniform3f(glGetUniformLocation(texShaderID, "lightColor"), 1.0f, 1.0f, 1.0f);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // Maintenant on peut lancer le viewer
     viewer.run();
 
     // Nettoyage
