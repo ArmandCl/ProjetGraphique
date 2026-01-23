@@ -11,7 +11,7 @@ uniform sampler2D diffuse_map;
 
 void main()
 {
-    // 1. Paramètres de lumière (sans le 'f')
+    // 1. Paramï¿½tres de lumiï¿½re (sans le 'f')
     float ambientIntensity = 0.2; 
     float diffuseIntensity = 0.8;
 

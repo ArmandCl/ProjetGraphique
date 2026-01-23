@@ -25,13 +25,13 @@ int main()
     Shader* phong_texture_shader = new Shader(shader_dir + "phong.vert", shader_dir + "phong.frag");
 
     // Textures pour la pièce
-    Texture* floor_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\floor.jpg");
-    Texture* wall_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\wall.jpg");
-    Texture* ceiling_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\wood.jpg");
-    Texture* wood_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\wood.jpg");
+    Texture* floor_texture = new Texture("textures\\floor.jpg");
+    Texture* wall_texture = new Texture("textures\\wall.jpg");
+    Texture* ceiling_texture = new Texture("textures\\wood.jpg");
+    Texture* wood_texture = new Texture("textures\\wood.jpg");
 
     // Texture métal pour les pieds
-    Texture* metal_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\metal.jpg");
+    Texture* metal_texture = new Texture("textures\\metal.jpg");
 
     // === PIÈCE COMPLÈTE (plus carrée) ===
     float scale_factor = 0.35f; // Réduction de 65% = 35% de la taille originale
@@ -105,7 +105,7 @@ int main()
     }
 
     // === AFFICHE SUR LE MUR ===
-    Texture* poster_texture = new Texture("C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\textures\\poster.jpg");
+    Texture* poster_texture = new Texture("textures\\poster.jpg");
 
     // Affiche plus petite proportionnellement
     Shape* poster = new Rectangle(phong_texture_shader, poster_texture, 0.8f * scale_factor, 1.0f * scale_factor, 0.02f * scale_factor);
@@ -121,7 +121,7 @@ int main()
 
 
 
-    Mesh* lamp = new Mesh(phong_texture_shader, "C:\\Users\\Armand\\Source\\Repos\\ArmandCl\\ProjetGraphique\\models\\lamp.obj", wood_texture);
+    Mesh* lamp = new Mesh(phong_texture_shader, "models\\lamp.obj", wood_texture);
 
     // Intégration au graphe de scène
     glm::mat4 mesh_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.7f, -0.875f))
