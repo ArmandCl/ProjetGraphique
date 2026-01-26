@@ -11,7 +11,7 @@
 #include <string>
 
 #ifndef SHADER_DIR
-#error "SHADER_DIR not defined"
+#error "SHADER_DIR not defined"P
 #endif
 
 int main()
@@ -71,7 +71,7 @@ int main()
     // === BUREAU (dans la pièce) ===
     Shape* desk_top = new Rectangle(phong_texture_shader, wood_texture, 2.0f * scale_factor, 1.0f * scale_factor, 0.1f * scale_factor);
     // Collé au mur arrière (qui est maintenant à Z = -0.875 - 0.875 = -1.75)
-    glm::mat4 desk_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.49f, -1.58f)) // Juste devant le mur arrière
+    glm::mat4 desk_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.45f, -1.58f)) // Juste devant le mur arrière
         * glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
     Node* desk_node = new Node(desk_mat);
@@ -85,12 +85,12 @@ int main()
 
     std::vector<glm::vec3> leg_positions = {
         // Pieds "avant" (côté centre) - les DEUX du même côté
-        glm::vec3(-0.8225f, -0.6125f, -1.45f),   // Gauche avant
-        glm::vec3(-0.2275f, -0.6125f, -1.45f),   // Droite avant
+        glm::vec3(-0.75f, -0.58f, -1.45f),   // Gauche avant
+        glm::vec3(-0.2275f, -0.58f, -1.45f),   // Droite avant
 
         // Pieds "arrière" (côté mur) - mais pas trop loin
-        glm::vec3(-0.8225f, -0.6125f, -1.71f),   // Gauche arrière
-        glm::vec3(-0.2275f, -0.6125f, -1.71f)    // Droite arrière
+        glm::vec3(-0.75f, -0.58f, -1.71f),   // Gauche arrière
+        glm::vec3(-0.2275f, -0.58f, -1.71f)    // Droite arrière
     };
 
     for (const auto& pos : leg_positions) {
@@ -110,10 +110,9 @@ int main()
     // Affiche plus petite proportionnellement
     Shape* poster = new Rectangle(phong_texture_shader, poster_texture, 0.8f * scale_factor, 1.0f * scale_factor, 0.02f * scale_factor);
 
-
-    glm::mat4 poster_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.865f, 0.0f, -0.875f))  // SUR le mur droit
-        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f))      // Tourné vers l'intérieur
-        * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));    // Correction verticale
+    glm::mat4 poster_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.865f, 0.0f, -0.875f))// sur le mur de gauche
+        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f))    
+        * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
     Node* poster_node = new Node(poster_mat);
     poster_node->add(poster);
