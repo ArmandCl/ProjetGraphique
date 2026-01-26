@@ -70,43 +70,6 @@ void Room::initRoom(float width, float height, float depth) {
         glBindVertexArray(0);
         walls.push_back(floor);
     }
-
-    // 2. PLAFOND (Y = half_height)
-    {
-        Wall ceiling;
-        std::vector<float> vertices = {
-            -half_width, half_height, -half_depth,   0.0f, 0.0f,
-             half_width, half_height, -half_depth,   1.0f, 0.0f,
-             half_width, half_height,  half_depth,   1.0f, 1.0f,
-            -half_width, half_height,  half_depth,   0.0f, 1.0f
-        };
-
-        std::vector<unsigned int> indices = { 0, 1, 2, 2, 3, 0 };
-        ceiling.vertex_count = static_cast<unsigned int>(indices.size());
-        ceiling.texture = ceiling_texture_;
-
-        glGenVertexArrays(1, &ceiling.VAO);
-        glGenBuffers(1, &ceiling.VBO);
-        glGenBuffers(1, &ceiling.EBO);
-
-        glBindVertexArray(ceiling.VAO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, ceiling.VBO);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ceiling.EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
-
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-
-        glBindVertexArray(0);
-        walls.push_back(ceiling);
-    }
-
     // 3. MUR ARRIÈRE (Z = -half_depth)
     {
         Wall back_wall;
@@ -141,42 +104,6 @@ void Room::initRoom(float width, float height, float depth) {
 
         glBindVertexArray(0);
         walls.push_back(back_wall);
-    }
-
-    // 4. MUR AVANT (Z = half_depth) - avec fenêtre
-    {
-        Wall front_wall;
-        std::vector<float> vertices = {
-            -half_width, -half_height, half_depth,   0.0f, 0.0f,
-             half_width, -half_height, half_depth,   1.0f, 0.0f,
-             half_width,  half_height, half_depth,   1.0f, 1.0f,
-            -half_width,  half_height, half_depth,   0.0f, 1.0f
-        };
-
-        std::vector<unsigned int> indices = { 0, 1, 2, 2, 3, 0 };
-        front_wall.vertex_count = static_cast<unsigned int>(indices.size());
-        front_wall.texture = wall_texture_;
-
-        glGenVertexArrays(1, &front_wall.VAO);
-        glGenBuffers(1, &front_wall.VBO);
-        glGenBuffers(1, &front_wall.EBO);
-
-        glBindVertexArray(front_wall.VAO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, front_wall.VBO);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, front_wall.EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
-
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-
-        glBindVertexArray(0);
-        walls.push_back(front_wall);
     }
 
     // 5. MUR GAUCHE (X = -half_width)
@@ -215,41 +142,7 @@ void Room::initRoom(float width, float height, float depth) {
         walls.push_back(left_wall);
     }
 
-    // 6. MUR DROIT (X = half_width)
-    {
-        Wall right_wall;
-        std::vector<float> vertices = {
-            half_width, -half_height, -half_depth,   0.0f, 0.0f,
-            half_width, -half_height,  half_depth,   1.0f, 0.0f,
-            half_width,  half_height,  half_depth,   1.0f, 1.0f,
-            half_width,  half_height, -half_depth,   0.0f, 1.0f
-        };
-
-        std::vector<unsigned int> indices = { 0, 1, 2, 2, 3, 0 };
-        right_wall.vertex_count = static_cast<unsigned int>(indices.size());
-        right_wall.texture = wall_texture_;
-
-        glGenVertexArrays(1, &right_wall.VAO);
-        glGenBuffers(1, &right_wall.VBO);
-        glGenBuffers(1, &right_wall.EBO);
-
-        glBindVertexArray(right_wall.VAO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, right_wall.VBO);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, right_wall.EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
-
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-
-        glBindVertexArray(0);
-        walls.push_back(right_wall);
-    }
+    
 
     std::cout << "Room created: " << width << "x" << height << "x" << depth << std::endl;
 }
