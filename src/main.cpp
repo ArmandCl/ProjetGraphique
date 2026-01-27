@@ -156,6 +156,17 @@ int main()
     viewer.scene_root->add(mesh_node_computer);
 
     computer->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
+
+    //integration keyboard
+    glm::mat4 mesh_keyboard = glm::translate(glm::mat4(1.0f), glm::vec3(-0.55f, -0.425f, -1.52f))
+        * glm::rotate(glm::mat4(1.0f), glm::radians(20.0f), glm::vec3(0.0f, -1.0f, 0.0f))
+        * glm::scale(glm::mat4(1.0f), glm::vec3(0.012f, 0.012f, 0.012f));
+
+    Node* mesh_node_keyboard = new Node(mesh_keyboard);
+    mesh_node_keyboard->add(keyboard);
+    viewer.scene_root->add(mesh_node_keyboard);
+
+    keyboard->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
     
     // Intégration du lit
     glm::mat4 mesh_lit = glm::translate(glm::mat4(1.0f), glm::vec3(0.58f, -0.56f, -0.25f))
@@ -166,7 +177,7 @@ int main()
     viewer.scene_root->add(mesh_node_lit);
     
     // Intégration de l'écran d'ordinateur
-    glm::mat4 mesh_ecran = glm::translate(glm::mat4(1.0f), glm::vec3(-0.45f, -0.40f, -1.85f)) 
+    glm::mat4 mesh_ecran = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.3132f, -1.65f)) 
         * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f))
         * glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f));
 
