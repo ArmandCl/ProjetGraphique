@@ -79,7 +79,7 @@ int main()
     viewer.scene_root->add(desk_node);
 
     // === PIEDS DE BUREAU ===
-    float leg_height = 0.7f * scale_factor;  // 0.245
+    float leg_height = 0.65f * scale_factor;  // 0.245
     float leg_radius = 0.05f * scale_factor; // 0.0175
     int slices = 32;
 
@@ -166,9 +166,9 @@ int main()
     viewer.scene_root->add(mesh_node_lit);
     
     // Intégration de l'écran d'ordinateur
-    glm::mat4 mesh_ecran = glm::translate(glm::mat4(1.0f), glm::vec3(-0.45f, -0.38f, -1.94f)) 
+    glm::mat4 mesh_ecran = glm::translate(glm::mat4(1.0f), glm::vec3(-0.45f, -0.40f, -1.85f)) 
         * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f))
-        * glm::scale(glm::mat4(1.0f), glm::vec3(0.15f, 0.15f, 0.15f));
+        * glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f));
 
     Node* mesh_node_ecran = new Node(mesh_ecran);
     mesh_node_ecran->add(monitor);
