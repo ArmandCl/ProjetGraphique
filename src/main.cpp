@@ -121,6 +121,12 @@ int main()
 
 
     Mesh* lamp = new Mesh(phong_texture_shader, "models\\lamp.obj", wood_texture);
+    Mesh* chevet = new Mesh(phong_texture_shader, "models\\chevet.obj", wood_texture);
+    Mesh* computer = new Mesh(phong_texture_shader, "models\\computer.obj", wood_texture);
+    Mesh* keyboard = new Mesh(phong_texture_shader, "models\\keyboard.obj", wood_texture);
+    Mesh* lit = new Mesh(phong_texture_shader, "models\\lit.obj", wood_texture);
+    Mesh* monitor = new Mesh(phong_texture_shader, "models\\monitor.obj", wood_texture);
+    Mesh* mouse = new Mesh(phong_texture_shader, "models\\mouse.obj", wood_texture);
 
     // Intégration au graphe de scène
     glm::mat4 mesh_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.7f, -0.875f))
@@ -133,15 +139,24 @@ int main()
     GLuint texShaderID = phong_texture_shader->get_id();
     lamp->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
     
+    // Intégration du lit
+    glm::mat4 mesh_lit = glm::translate(glm::mat4(1.0f), glm::vec3(0.58f, -0.56f, -0.25f))
+        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));  // Rotation pour orienter le lit
+
+    Node* mesh_node_lit = new Node(mesh_lit);
+    mesh_node_lit->add(lit);
+    viewer.scene_root->add(mesh_node_lit);
     
     // 1. Définir les paramètres une seule fois
     glm::vec3 lp(0.0f, 0.7f, -0.875f);
     glm::vec3 lc(1.0f, 1.0f, 1.0f);
+    
     // 2. Envoyer à tous les objets (Casting nécessaire pour Shape*)
     lamp->setLight(lp, lc);
     ((Rectangle*)desk_top)->setLight(lp, lc);
     ((Room*)room)->setLight(lp, lc);
     ((Rectangle*)poster)->setLight(lp, lc);
+    lit->setLight(lp, lc);
 
     // Maintenant on peut lancer le viewer
     viewer.run();
