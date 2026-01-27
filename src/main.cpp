@@ -71,7 +71,7 @@ int main()
     // === BUREAU (dans la pièce) ===
     Shape* desk_top = new Rectangle(phong_texture_shader, wood_texture, 2.0f * scale_factor, 1.0f * scale_factor, 0.1f * scale_factor);
     // Collé au mur arrière (qui est maintenant à Z = -0.875 - 0.875 = -1.75)
-    glm::mat4 desk_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.45f, -1.58f)) // Juste devant le mur arrière
+    glm::mat4 desk_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.45f, -1.57f)) // Juste devant le mur arrière
         * glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
     Node* desk_node = new Node(desk_mat);
@@ -147,17 +147,30 @@ int main()
     mesh_node_lit->add(lit);
     viewer.scene_root->add(mesh_node_lit);
     
+    // Intégration de l'écran d'ordinateur
+    glm::mat4 mesh_ecran = glm::translate(glm::mat4(1.0f), glm::vec3(-0.45f, -0.38f, -1.94f)) 
+        * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f))
+        * glm::scale(glm::mat4(1.0f), glm::vec3(0.15f, 0.15f, 0.15f));
+
+    Node* mesh_node_ecran = new Node(mesh_ecran);
+    mesh_node_ecran->add(monitor);
+    viewer.scene_root->add(mesh_node_ecran);
+
     // 1. Définir les paramètres une seule fois
     glm::vec3 lp(0.0f, 0.7f, -0.875f);
     glm::vec3 lc(1.0f, 1.0f, 1.0f);
-    
+
     // 2. Envoyer à tous les objets (Casting nécessaire pour Shape*)
     lamp->setLight(lp, lc);
     ((Rectangle*)desk_top)->setLight(lp, lc);
     ((Room*)room)->setLight(lp, lc);
     ((Rectangle*)poster)->setLight(lp, lc);
     lit->setLight(lp, lc);
+    computer->setLight(lp, lc);
+    monitor->setLight(lp, lc);
 
+
+    
     // Maintenant on peut lancer le viewer
     viewer.run();
 
