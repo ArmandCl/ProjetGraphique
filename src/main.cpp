@@ -29,6 +29,9 @@ int main()
     Texture* wall_texture = new Texture("textures\\wall.jpg");
     Texture* ceiling_texture = new Texture("textures\\wood.jpg");
     Texture* wood_texture = new Texture("textures\\wood.jpg");
+    Texture* computer_texture = new Texture("textures\\black.jpg");
+    Texture* lit_texture = new Texture("textures\\test.jpg");
+    Texture* framed_texture = new Texture("textures\\framed.jpeg");
 
     // Texture métal pour les pieds
     Texture* metal_texture = new Texture("textures\\metal.jpg");
@@ -120,11 +123,11 @@ int main()
 
     Mesh* lamp = new Mesh(phong_texture_shader, "models\\lamp.obj", wood_texture);
     Mesh* chevet = new Mesh(phong_texture_shader, "models\\chevet.obj", wood_texture);
-    Mesh* computer = new Mesh(phong_texture_shader, "models\\computer.obj", wood_texture);
-    Mesh* keyboard = new Mesh(phong_texture_shader, "models\\keyboard.obj", wood_texture);
-    Mesh* lit = new Mesh(phong_texture_shader, "models\\lit.obj", wood_texture);
-    Mesh* monitor = new Mesh(phong_texture_shader, "models\\monitor.obj", wood_texture);
-    Mesh* mouse = new Mesh(phong_texture_shader, "models\\mouse.obj", wood_texture);
+    Mesh* computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture);
+    Mesh* keyboard = new Mesh(phong_texture_shader, "models\\keyboard.obj", computer_texture);
+    Mesh* lit = new Mesh(phong_texture_shader, "models\\test.obj", lit_texture);
+    Mesh* monitor = new Mesh(phong_texture_shader, "models\\monitor.obj", computer_texture);
+    Mesh* mouse = new Mesh(phong_texture_shader, "models\\mouse.obj", computer_texture);
 
     //integration lamp
     glm::mat4 mesh_lamp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.7f, -0.875f))
@@ -133,8 +136,6 @@ int main()
     Node* mesh_node_lamp = new Node(mesh_lamp);
     mesh_node_lamp->add(lamp);
     viewer.scene_root->add(mesh_node_lamp);
-
-    lamp->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
 
     //integration chevet
     glm::mat4 mesh_chevet = glm::translate(glm::mat4(1.0f), glm::vec3(0.65f, -0.7f, -0.675f))
@@ -145,8 +146,6 @@ int main()
     mesh_node_chevet->add(chevet);
     viewer.scene_root->add(mesh_node_chevet);
 
-    chevet->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
-
     //integration computer
     glm::mat4 mesh_computer = glm::translate(glm::mat4(1.0f), glm::vec3(-0.78f, -0.34f, -1.58f))
         * glm::scale(glm::mat4(1.0f), glm::vec3(0.04f, 0.04f, 0.04f));
@@ -154,8 +153,6 @@ int main()
     Node* mesh_node_computer = new Node(mesh_computer);
     mesh_node_computer->add(computer);
     viewer.scene_root->add(mesh_node_computer);
-
-    computer->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
 
     //integration keyboard
     glm::mat4 mesh_keyboard = glm::translate(glm::mat4(1.0f), glm::vec3(-0.55f, -0.425f, -1.52f))
@@ -166,8 +163,6 @@ int main()
     mesh_node_keyboard->add(keyboard);
     viewer.scene_root->add(mesh_node_keyboard);
 
-    keyboard->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
-
     //integration mouse
     glm::mat4 mesh_mouse = glm::translate(glm::mat4(1.0f), glm::vec3(-0.35f, -0.43f, -1.52f))
         * glm::rotate(glm::mat4(1.0f), glm::radians(190.0f), glm::vec3(0.0f, 1.0f, 0.0f))
@@ -176,8 +171,6 @@ int main()
     Node* mesh_node_mouse = new Node(mesh_mouse);
     mesh_node_mouse->add(mouse);
     viewer.scene_root->add(mesh_node_mouse);
-
-    mouse->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
     
     // Intégration du lit
     glm::mat4 mesh_lit = glm::translate(glm::mat4(1.0f), glm::vec3(0.58f, -0.56f, -0.25f))
@@ -196,6 +189,24 @@ int main()
     mesh_node_ecran->add(monitor);
     viewer.scene_root->add(mesh_node_ecran);
 
+    //integration d'une image sur l'écran
+    float screen_w = 0.31f; // Largeur ajustée pour le moniteur
+    float screen_h = 0.169f; // Hauteur ajustée (format 16:9 approx)
+
+    Shape* screen_display = new Rectangle(texture_shader, framed_texture, screen_w, screen_h, 0.0001f);
+    glm::mat4 screen_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.285f, -1.63f)) 
+        * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f)) // Ton réglage actuel
+        * glm::scale(glm::mat4(1.0f), glm::vec3(-1.0f, 1.0f, 1.0f)); // MIRROIR HORIZONTAL
+        
+    Node* screen_node = new Node(screen_mat);
+    screen_node->add(screen_display);
+    viewer.scene_root->add(screen_node);
+
+
+
+
+
+
     // 1. Définir les paramètres une seule fois
     glm::vec3 lp(0.0f, 0.7f, -0.875f);
     glm::vec3 lc(1.0f, 1.0f, 1.0f);
@@ -208,7 +219,9 @@ int main()
     lit->setLight(lp, lc);
     computer->setLight(lp, lc);
     monitor->setLight(lp, lc);
-
+    keyboard->setLight(lp, lc);
+    mouse->setLight(lp, lc);
+    chevet->setLight(lp, lc);
 
     
     // Maintenant on peut lancer le viewer
@@ -222,6 +235,11 @@ int main()
     delete wall_texture;
     delete ceiling_texture;
     delete poster_texture;
-
+    delete framed_texture;
+    delete computer_texture;
+    delete lit_texture;
+    delete phong_color_shader;
+    delete phong_texture_shader;
+    
     return 0;
 }
