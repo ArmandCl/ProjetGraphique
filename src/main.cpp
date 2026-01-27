@@ -167,6 +167,17 @@ int main()
     viewer.scene_root->add(mesh_node_keyboard);
 
     keyboard->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
+
+    //integration mouse
+    glm::mat4 mesh_mouse = glm::translate(glm::mat4(1.0f), glm::vec3(-0.35f, -0.43f, -1.52f))
+        * glm::rotate(glm::mat4(1.0f), glm::radians(190.0f), glm::vec3(0.0f, 1.0f, 0.0f))
+        * glm::scale(glm::mat4(1.0f), glm::vec3(0.012f, 0.012f, 0.012f));
+
+    Node* mesh_node_mouse = new Node(mesh_mouse);
+    mesh_node_mouse->add(mouse);
+    viewer.scene_root->add(mesh_node_mouse);
+
+    mouse->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
     
     // Intégration du lit
     glm::mat4 mesh_lit = glm::translate(glm::mat4(1.0f), glm::vec3(0.58f, -0.56f, -0.25f))
