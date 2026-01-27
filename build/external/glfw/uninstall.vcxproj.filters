@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\eliot\source\repos\roomproject\build\CMakeFiles\88600823bf3d40a5fbc6b615e8d4d81c\uninstall.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\eliot\source\repos\roomproject\external\glfw\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\eliot\source\repos\roomproject\build\external\glfw\CMakeFiles\uninstall" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{69DD8957-2D54-3B4D-9825-486F03A10135}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

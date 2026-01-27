@@ -118,8 +118,6 @@ int main()
     poster_node->add(poster);
     viewer.scene_root->add(poster_node);
 
-
-
     Mesh* lamp = new Mesh(phong_texture_shader, "models\\lamp.obj", wood_texture);
     Mesh* chevet = new Mesh(phong_texture_shader, "models\\chevet.obj", wood_texture);
     Mesh* computer = new Mesh(phong_texture_shader, "models\\computer.obj", wood_texture);
@@ -128,20 +126,40 @@ int main()
     Mesh* monitor = new Mesh(phong_texture_shader, "models\\monitor.obj", wood_texture);
     Mesh* mouse = new Mesh(phong_texture_shader, "models\\mouse.obj", wood_texture);
 
-    // Intégration au graphe de scène
-    glm::mat4 mesh_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.7f, -0.875f))
+    //integration lamp
+    glm::mat4 mesh_lamp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.7f, -0.875f))
         * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 
-    Node* mesh_node = new Node(mesh_mat);
-    mesh_node->add(lamp);
-    viewer.scene_root->add(mesh_node);
+    Node* mesh_node_lamp = new Node(mesh_lamp);
+    mesh_node_lamp->add(lamp);
+    viewer.scene_root->add(mesh_node_lamp);
 
-    GLuint texShaderID = phong_texture_shader->get_id();
     lamp->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
+
+    //integration chevet
+    glm::mat4 mesh_chevet = glm::translate(glm::mat4(1.0f), glm::vec3(0.65f, -0.7f, -0.675f))
+        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f))
+        * glm::scale(glm::mat4(1.0f), glm::vec3(0.08f, 0.08f, 0.08f));
+
+    Node* mesh_node_chevet = new Node(mesh_chevet);
+    mesh_node_chevet->add(chevet);
+    viewer.scene_root->add(mesh_node_chevet);
+
+    chevet->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
+
+    //integration computer
+    glm::mat4 mesh_computer = glm::translate(glm::mat4(1.0f), glm::vec3(-0.78f, -0.34f, -1.58f))
+        * glm::scale(glm::mat4(1.0f), glm::vec3(0.04f, 0.04f, 0.04f));
+
+    Node* mesh_node_computer = new Node(mesh_computer);
+    mesh_node_computer->add(computer);
+    viewer.scene_root->add(mesh_node_computer);
+
+    computer->setLight(glm::vec3(0.0f, 0.7f, -0.875f), glm::vec3(1.0f, 1.0f, 1.0f));
     
     // Intégration du lit
     glm::mat4 mesh_lit = glm::translate(glm::mat4(1.0f), glm::vec3(0.58f, -0.56f, -0.25f))
-        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));  // Rotation pour orienter le lit
+        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));  // Rotation pour orienter le lit
 
     Node* mesh_node_lit = new Node(mesh_lit);
     mesh_node_lit->add(lit);
