@@ -91,7 +91,7 @@ void Room::initRoom(float width, float height, float depth, float thickness) {
     createPart({ x_out, y_limit_bot, -hd, 0,0, x_in, y_limit_bot, -hd, 1,0,  x_in, y_limit_bot, hd, 1,1,  x_out, y_limit_bot, hd, 0,1 }, wall_texture_); 
     createPart({ x_out, y_limit_bot, -hd, 0,0, x_out, hh, -hd, 0,1,  x_in, hh, -hd, 1,1,  x_in, y_limit_bot, -hd, 1,0 }, wall_texture_);
 
-    // --- 3. MUR ARRIÈRE (Décalé de 'eps' vers l'arrière) ---
+    // --- 3. MUR ARRIÈRE ---
     float z_in = -hd - eps;
     float z_out = -hd - thickness - eps;
     float win_w = width * 0.35f; float win_h = height * 0.45f;
@@ -99,28 +99,32 @@ void Room::initRoom(float width, float height, float depth, float thickness) {
     float xL = x_off - (win_w * 0.5f); float xR = x_off + (win_w * 0.5f);
     float yB = -(win_h * 0.5f); float yT = (win_h * 0.5f);
 
-    // Faces avant/arrière
-    createPart({ -hw, y_limit_bot, z_in, 0,0, hw, y_limit_bot, z_in, 1,0, hw, yB, z_in, 1,1, -hw, yB, z_in, 0,1 }, wall_texture_);
-    createPart({ -hw, yT, z_in, 0,0,  hw, yT, z_in, 1,0,  hw, hh, z_in, 1,1, -hw, hh, z_in, 0,1 }, wall_texture_);
-    createPart({ -hw, yB, z_in, 0,0,  xL, yB, z_in, 1,0,  xL, yT, z_in, 1,1, -hw, yT, z_in, 0,1 }, wall_texture_);
+    // On définit le nouveau bord gauche pour boucher le coin
+    float x_bord_gauche = -hw - thickness; 
+
+    // Faces avant/arrière (Modifiées pour partir de x_bord_gauche)
+    createPart({ x_bord_gauche, y_limit_bot, z_in, 0,0, hw, y_limit_bot, z_in, 1,0, hw, yB, z_in, 1,1, x_bord_gauche, yB, z_in, 0,1 }, wall_texture_);
+    createPart({ x_bord_gauche, yT, z_in, 0,0,  hw, yT, z_in, 1,0,  hw, hh, z_in, 1,1, x_bord_gauche, hh, z_in, 0,1 }, wall_texture_);
+    createPart({ x_bord_gauche, yB, z_in, 0,0,  xL, yB, z_in, 1,0,  xL, yT, z_in, 1,1, x_bord_gauche, yT, z_in, 0,1 }, wall_texture_);
     createPart({ xR, yB, z_in, 0,0,   hw, yB, z_in, 1,0,  hw, yT, z_in, 1,1, xR, yT, z_in, 0,1 }, wall_texture_);
 
-    createPart({ hw, y_limit_bot, z_out, 0,0, -hw, y_limit_bot, z_out, 1,0, -hw, yB, z_out, 1,1, hw, yB, z_out, 0,1 }, wall_texture_);
-    createPart({ hw, yT, z_out, 0,0,  -hw, yT, z_out, 1,0,  -hw, hh, z_out, 1,1, hw, hh, z_out, 0,1 }, wall_texture_);
-    createPart({ xL, yB, z_out, 0,0,  -hw, yB, z_out, 1,0,  -hw, yT, z_out, 1,1, xL, yT, z_out, 0,1 }, wall_texture_);
+    // Faces extérieures (Côté extérieur de la pièce)
+    createPart({ hw, y_limit_bot, z_out, 0,0, x_bord_gauche, y_limit_bot, z_out, 1,0, x_bord_gauche, yB, z_out, 1,1, hw, yB, z_out, 0,1 }, wall_texture_);
+    createPart({ hw, yT, z_out, 0,0,  x_bord_gauche, yT, z_out, 1,0,  x_bord_gauche, hh, z_out, 1,1, hw, hh, z_out, 0,1 }, wall_texture_);
+    createPart({ xL, yB, z_out, 0,0,  x_bord_gauche, yB, z_out, 1,0,  x_bord_gauche, yT, z_out, 1,1, xL, yT, z_out, 0,1 }, wall_texture_);
     createPart({ hw, yB, z_out, 0,0,   xR, yB, z_out, 1,0,   xR, yT, z_out, 1,1, hw, yT, z_out, 0,1 }, wall_texture_);
 
-    // Tunnel fenêtre
+    // Tunnel fenêtre (L'intérieur de l'épaisseur du trou)
     createPart({ xL, yB, z_in, 0,0, xR, yB, z_in, 1,0, xR, yB, z_out, 1,1, xL, yB, z_out, 0,1 }, wall_texture_);
     createPart({ xL, yT, z_out, 0,0, xR, yT, z_out, 1,0, xR, yT, z_in, 1,1, xL, yT, z_in, 0,1 }, wall_texture_);
     createPart({ xL, yB, z_out, 0,0, xL, yT, z_out, 1,0, xL, yT, z_in, 1,1, xL, yB, z_in, 0,1 }, wall_texture_);
     createPart({ xR, yB, z_in, 0,0, xR, yT, z_in, 1,0, xR, yT, z_out, 1,1, xR, yB, z_out, 0,1 }, wall_texture_);
 
-    // Tranches extérieures du mur arrière (Haut, Bas, Gauche, et maintenant DROITE)
-    createPart({ -hw, hh, z_in, 0,0,  hw, hh, z_in, 1,0,  hw, hh, z_out, 1,1,  -hw, hh, z_out, 0,1 }, wall_texture_); // Haut
-    createPart({ -hw, y_limit_bot, z_out, 0,0, hw, y_limit_bot, z_out, 1,0, hw, y_limit_bot, z_in, 1,1,  -hw, y_limit_bot, z_in, 0,1 }, wall_texture_); // Bas
-    createPart({ -hw, y_limit_bot, z_in, 0,0, -hw, y_limit_bot, z_out, 1,0, -hw, hh, z_out, 1,1, -hw, hh, z_in, 0,1 }, wall_texture_); // Gauche
-    createPart({ hw, y_limit_bot, z_out, 0,0, hw, y_limit_bot, z_in, 1,0, hw, hh, z_in, 1,1, hw, hh, z_out, 0,1 }, wall_texture_); // DROITE (le missing part !)
+    // Tranches qui ferment l'épaisseur du mur
+    createPart({ x_bord_gauche, hh, z_in, 0,0,  hw, hh, z_in, 1,0,  hw, hh, z_out, 1,1,  x_bord_gauche, hh, z_out, 0,1 }, wall_texture_); // Haut
+    createPart({ x_bord_gauche, y_limit_bot, z_out, 0,0, hw, y_limit_bot, z_out, 1,0, hw, y_limit_bot, z_in, 1,1,  x_bord_gauche, y_limit_bot, z_in, 0,1 }, wall_texture_); // Bas
+    createPart({ x_bord_gauche, y_limit_bot, z_in, 0,0, x_bord_gauche, y_limit_bot, z_out, 1,0, x_bord_gauche, hh, z_out, 1,1, x_bord_gauche, hh, z_in, 0,1 }, wall_texture_); // Gauche
+    createPart({ hw, y_limit_bot, z_out, 0,0, hw, y_limit_bot, z_in, 1,0, hw, hh, z_in, 1,1, hw, hh, z_out, 0,1 }, wall_texture_); // Droite
 }
 
 void Room::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) {
