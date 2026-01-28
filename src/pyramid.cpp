@@ -42,13 +42,16 @@ Pyramid::Pyramid(Shader *shader_program) : Shape(shader_program)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 }
 
-void Pyramid::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection)
+// src/pyramid.cpp
+
+void Pyramid::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap)
 {   
     glUseProgram(this->shader_program_);
 
     glBindVertexArray(VAO);
     
-    Shape::draw(model, view, projection);
+    // --- APPEL CRUCIAL AU PARENT ---
+    Shape::draw(model, view, projection, lightSpaceMatrix, shadowMap);
 
     glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
 }

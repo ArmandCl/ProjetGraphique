@@ -99,7 +99,9 @@ Rectangle::~Rectangle()
     glDeleteBuffers(1, &EBO);
 }
 
-void Rectangle::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection)
+// src/rectangle.cpp
+
+void Rectangle::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap)
 {
     // 1. DETERMINER SI TRANSPARENT
     bool isTransparent = (object_color.a < 1.0f);
@@ -107,35 +109,33 @@ void Rectangle::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection)
     // 2. ACTIVER LE SHADER D'ABORD
     glUseProgram(this->shader_program_);
 
-    // 3. ENVOYER LES MATRICES (Position, Vue, Projection)
-    glUniformMatrix4fv(glGetUniformLocation(this->shader_program_, "model"), 1, GL_FALSE, &model[0][0]);
-    glUniformMatrix4fv(glGetUniformLocation(this->shader_program_, "view"), 1, GL_FALSE, &view[0][0]);
-    glUniformMatrix4fv(glGetUniformLocation(this->shader_program_, "projection"), 1, GL_FALSE, &projection[0][0]);
+    // --- 3. ENVOI DES MATRICES ET OMBRES VIA SHAPE::DRAW ---
+    // (Ceci remplace tes 3 anciens appels glUniformMatrix4fv)
+    Shape::draw(model, view, projection, lightSpaceMatrix, shadowMap);
 
-    // 4. ENVOYER LA COULEUR ET LA LUMIERE
+    // 4. ENVOYER LA COULEUR ET LA LUMIERE (Spécifique au rectangle)
     GLint colorLoc = glGetUniformLocation(this->shader_program_, "objectColor");
     glUniform4f(colorLoc, object_color.r, object_color.g, object_color.b, object_color.a);
     glUniform3f(glGetUniformLocation(this->shader_program_, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
     glUniform3f(glGetUniformLocation(this->shader_program_, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
 
-    // 5. GERER LA TEXTURE (si c'est un poster)
+    // 5. GERER LA TEXTURE
     if (has_texture_ && texture_ != nullptr) {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture_->getGLid());
         glUniform1i(glGetUniformLocation(this->shader_program_, "diffuse_map"), 0);
     }
 
-    // 6. DESACTIVER LE Z-BUFFER JUSTE POUR LE DESSIN SI TRANSPARENT
+    // 6. GESTION DE LA TRANSPARENCE
     if(isTransparent) {
-        // On ne coupe pas le DepthMask, on s'assure juste que le Blend est là
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
+
     // 7. DESSINER
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, vertex_count, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
-    // 8. RÉACTIVER LE Z-BUFFER POUR LES AUTRES
     if(isTransparent) glDepthMask(GL_TRUE);
 }

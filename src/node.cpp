@@ -16,20 +16,20 @@ void Node::add(Shape* shape) {
     children_shape_.push_back(shape);
 }
 
-void Node::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) {
+void Node::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap) {
     glm::mat4 updatedModel = model * transform_;
-
-    for (auto child : children_) {
-        child->draw(updatedModel, view, projection);
-    }
-
-    for (auto child : children_shape_) {
-        child->draw(updatedModel, view, projection);
-    }
+    for (auto child : children_) child->draw(updatedModel, view, projection, lightSpaceMatrix, shadowMap);
+    for (auto shape : children_shape_) shape->draw(updatedModel, view, projection, lightSpaceMatrix, shadowMap);
 }
 
 void Node::key_handler(int key) const {
     for (const auto& child : children_) {
             child->key_handler(key);
     }
+}
+
+void Node::drawShadow(Shader* shader, glm::mat4 parent_transform) {
+    glm::mat4 current_transform = parent_transform * transform_;
+    for (auto child : children_) child->drawShadow(shader, current_transform);
+    for (auto shape : children_shape_) shape->drawShadow(shader, current_transform);
 }
