@@ -1,4 +1,4 @@
-# Projet de Synthèse d'Image - Scène OpenGL
+# Projet Informatique Graphique - Scène 3D
 
 Notre projet représente une scène 3D développée en C++ avec OpenGL.
 
