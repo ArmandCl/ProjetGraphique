@@ -180,14 +180,19 @@ void Viewer::on_key(int key, int action) {
 
     // Touche 'C' pour changer de mode
     if (key == GLFW_KEY_C && action == GLFW_PRESS) {
-        is_free_camera = !is_free_camera;
+            is_free_camera = !is_free_camera;
         
         if (is_free_camera) {
-            // On capture la souris pour le mode FPS
+            // --- SYNCHRONISATION DES ANGLES ---
+            // On calcule le Yaw et le Pitch à partir du camera_front actuel 
+            // pour que le mode libre commence exactement là où l'orbite s'est arrêtée.
+            
+            pitch = glm::degrees(asin(camera_front.y));
+            yaw = glm::degrees(atan2(camera_front.z, camera_front.x));
+
             glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             first_mouse = true; 
         } else {
-            // On libère la souris pour le mode orbital
             glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
     }
