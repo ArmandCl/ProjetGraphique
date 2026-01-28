@@ -11,7 +11,7 @@
 #include <string>
 
 #ifndef SHADER_DIR
-#error "SHADER_DIR not defined"P
+#error "SHADER_DIR not defined"
 #endif
 
 int main()

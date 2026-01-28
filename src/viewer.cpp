@@ -5,8 +5,8 @@
 #include "glm/ext.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-// Variables globales pour les callbacks (on utilise le user pointer à la place)
-// Mais on garde une référence pour les touches
+// Variables globales pour les callbacks (on utilise le user pointer ï¿½ la place)
+// Mais on garde une rï¿½fï¿½rence pour les touches
 bool keys[1024] = { false };
 
 Viewer::Viewer(int width, int height)
@@ -43,7 +43,7 @@ Viewer::Viewer(int width, int height)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
-    win = glfwCreateWindow(width, height, "Viewer - Caméra Libre", NULL, NULL);
+    win = glfwCreateWindow(width, height, "Viewer - Camï¿½ra Libre", NULL, NULL);
 
     if (win == NULL) {
         std::cerr << "Failed to create window" << std::endl;
@@ -57,7 +57,7 @@ Viewer::Viewer(int width, int height)
         glfwTerminate();
     }
 
-    // Set user pointer pour accéder à l'instance dans les callbacks
+    // Set user pointer pour accï¿½der ï¿½ l'instance dans les callbacks
     glfwSetWindowUserPointer(win, this);
 
     // Enregistrement des callbacks
@@ -79,10 +79,10 @@ Viewer::Viewer(int width, int height)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    // Initialisation de la scène
+    // Initialisation de la scï¿½ne
     scene_root = new Node();
 
-    // Initialisation des vecteurs de la caméra
+    // Initialisation des vecteurs de la camï¿½ra
     update_camera_vectors();
 }
 
@@ -98,34 +98,37 @@ void Viewer::run() {
         delta_time = current_frame - last_frame;
         last_frame = current_frame;
 
-        // Traitement des inputs
-        process_movement();
+        // Logique de la camÃ©ra
+        if (is_free_camera) {
+            process_movement(); // ZQSD + Souris
+        } else {
+            // MODE ORBITAL : La camÃ©ra tourne autour de la piÃ¨ce
+            float time = glfwGetTime() * orbit_speed;
+            
+            // Calcul de la position circulaire (X, Z)
+            // On soustrait 0.875f Ã  Z car ta piÃ¨ce est centrÃ©e Ã  cet endroit dans main.cpp
+            camera_position.x = sin(time) * orbit_radius;
+            camera_position.z = cos(time) * orbit_radius - 0.875f;
+            camera_position.y = orbit_height;
 
-        // Nettoyage du buffer
+            // La camÃ©ra regarde le centre de la piÃ¨ce
+            glm::vec3 target = glm::vec3(0.0f, 0.0f, -0.875f);
+            camera_front = glm::normalize(target - camera_position);
+            
+            // Recalcul manuel des vecteurs pour Ã©viter les tremblements
+            camera_right = glm::normalize(glm::cross(camera_front, world_up));
+            camera_up = glm::normalize(glm::cross(camera_right, camera_front));
+        }
+
+        // Nettoyage et dessin
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Matrice modèle
         glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 view = glm::lookAt(camera_position, camera_position + camera_front, camera_up);
+        glm::mat4 projection = glm::perspective(glm::radians(zoom), (float)window_width / (float)window_height, 0.1f, 100.0f);
 
-        // Matrice vue (caméra)
-        glm::mat4 view = glm::lookAt(
-            camera_position,
-            camera_position + camera_front,
-            camera_up
-        );
-
-        // Matrice projection
-        glm::mat4 projection = glm::perspective(
-            glm::radians(zoom),
-            (float)window_width / (float)window_height,
-            0.1f,
-            100.0f
-        );
-
-        // Dessin de la scène
         scene_root->draw(model, view, projection);
 
-        // Échange des buffers et poll des événements
         glfwSwapBuffers(win);
         glfwPollEvents();
     }
@@ -153,37 +156,45 @@ void Viewer::framebuffer_size_callback_static(GLFWwindow* window, int width, int
     viewer->on_framebuffer_size(width, height);
 }
 
-// ============ MÉTHODES D'INSTANCE ============
+// ============ Mï¿½THODES D'INSTANCE ============
 
 void Viewer::on_key(int key, int action) {
-    // Quitter avec Échap
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(win, GLFW_TRUE);
     }
 
-    // Libérer/attraper le curseur avec la touche M
-    if (key == GLFW_KEY_M && action == GLFW_PRESS) {
-        if (glfwGetInputMode(win, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
-            glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-            first_mouse = true;
-        }
-        else {
+    // Touche 'C' pour changer de mode
+    if (key == GLFW_KEY_C && action == GLFW_PRESS) {
+        is_free_camera = !is_free_camera;
+        
+        if (is_free_camera) {
+            // On capture la souris pour le mode FPS
             glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            first_mouse = true; 
+        } else {
+            // On libÃ¨re la souris pour le mode orbital
+            glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
     }
 
-    // Enregistrer l'état des touches
+    if (key == GLFW_KEY_M && action == GLFW_PRESS) {
+        if (glfwGetInputMode(win, GLFW_CURSOR) == GLFW_CURSOR_DISABLED)
+            glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        else
+            glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+
+    // Enregistrement des touches (seulement utile en mode libre)
     if (key >= 0 && key < 1024) {
-        if (action == GLFW_PRESS) {
-            keys[key] = true;
-        }
-        else if (action == GLFW_RELEASE) {
-            keys[key] = false;
-        }
+        if (action == GLFW_PRESS) keys[key] = true;
+        else if (action == GLFW_RELEASE) keys[key] = false;
     }
 }
 
 void Viewer::on_mouse(double xpos, double ypos) {
+    // Si on n'est pas en mode libre, on ignore les mouvements de souris
+    if (!is_free_camera) return;
+
     if (first_mouse) {
         last_x = xpos;
         last_y = ypos;
@@ -191,7 +202,7 @@ void Viewer::on_mouse(double xpos, double ypos) {
     }
 
     float xoffset = xpos - last_x;
-    float yoffset = last_y - ypos; // Inversé car les coordonnées y vont de bas en haut
+    float yoffset = last_y - ypos; 
     last_x = xpos;
     last_y = ypos;
 
@@ -201,13 +212,9 @@ void Viewer::on_mouse(double xpos, double ypos) {
     yaw += xoffset;
     pitch += yoffset;
 
-    // Limiter l'angle de vue pour éviter le flip
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
+    if (pitch > 89.0f) pitch = 89.0f;
+    if (pitch < -89.0f) pitch = -89.0f;
 
-    // Mettre à jour les vecteurs de la caméra
     update_camera_vectors();
 }
 

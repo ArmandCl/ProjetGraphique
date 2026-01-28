@@ -67,6 +67,11 @@ private:
     // Timing
     float delta_time;
     float last_frame;
+
+    bool is_free_camera = false; // Par défaut, elle tourne
+    float orbit_radius = 3.0f;
+    float orbit_speed = 0.5f;
+    float orbit_height = 1.0f;
 };
 
 #endif // VIEWER_H
