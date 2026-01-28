@@ -31,7 +31,7 @@ int main()
     Texture* wood_texture = new Texture("textures\\wood.jpg");
     Texture* computer_texture = new Texture("textures\\black.jpg");
     //Texture* lit_texture = new Texture("textures\\white_sheet2.jpg");
-    Texture* framed_texture = new Texture("textures\\framed.jpeg");
+    Texture* framed_texture = new Texture("textures\\csgo_screen.png");
 
     // Texture métal pour les pieds
     Texture* metal_texture = new Texture("textures\\metal.jpg");
@@ -109,14 +109,15 @@ int main()
     }
 
     // === AFFICHE SUR LE MUR ===
-    Texture* poster_texture = new Texture("textures\\poster.jpg");
+    Texture* poster_texture = new Texture("textures\\csgo_poster.png");
 
     // Affiche plus petite proportionnellement
     Shape* poster = new Rectangle(phong_texture_shader, poster_texture, 0.8f * scale_factor, 1.0f * scale_factor, 0.02f * scale_factor);
 
     glm::mat4 poster_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.865f, 0.0f, -0.875f))// sur le mur de gauche
-        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f))    
-        * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f))
+        * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f))
+        * glm::scale(glm::mat4(1.0f), glm::vec3(-1.0f, 1.0f, 1.0f));
 
     Node* poster_node = new Node(poster_mat);
     poster_node->add(poster);
