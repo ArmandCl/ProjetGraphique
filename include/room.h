@@ -8,18 +8,21 @@
 
 class Room : public Shape {
 public:
+    // Constructeur sans textures
     Room(Shader* shader_program,
         float width = 5.0f,
         float height = 3.0f,
         float depth = 5.0f);
 
+    // UNIQUE constructeur avec textures (celui-ci gÃ¨re aussi l'Ã©paisseur)
     Room(Shader* shader_program,
         Texture* floor_texture,
         Texture* wall_texture,
         Texture* ceiling_texture,
-        float width = 5.0f,
-        float height = 3.0f,
-        float depth = 5.0f);
+        float width, 
+        float height, 
+        float depth, 
+        float thickness = 0.15f); // Valeur par dÃ©faut ici
 
     virtual ~Room();
 
@@ -30,7 +33,7 @@ public:
     }
 
 private:
-    void initRoom(float width, float height, float depth);
+    void initRoom(float width, float height, float depth, float thickness);
 
     struct Wall {
         unsigned int VAO;
@@ -43,14 +46,8 @@ private:
     std::vector<Wall> walls;
     float width, height, depth;
     bool has_textures_;
-
-    // Textures séparées pour chaque surface
-    Texture* floor_texture_;
-    Texture* wall_texture_;
-    Texture* ceiling_texture_;
-
-    glm::vec3 lightPos;
-    glm::vec3 lightColor;
+    Texture *floor_texture_, *wall_texture_, *ceiling_texture_;
+    glm::vec3 lightPos, lightColor;
 };
 
-#endif // ROOM_H
+#endif

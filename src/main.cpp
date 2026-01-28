@@ -48,7 +48,8 @@ int main()
         ceiling_texture,
         room_width,
         room_height,
-        room_depth);
+        room_depth,
+        0.15f);
 
     // La pièce est centrée à l'origine
     glm::mat4 room_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.875f)); // Centre ajusté
