@@ -6,7 +6,7 @@ in vec3 Normal;
 in vec3 LightPos;
 
 uniform vec3 lightColor;
-uniform vec4 objectColor; // Changé en vec4 pour inclure l'alpha (transparence)
+uniform vec4 objectColor; 
 
 void main()
 {
@@ -27,6 +27,5 @@ void main()
     // On calcule la couleur RGB
     vec3 result = (ambient + diffuse + specular) * objectColor.rgb;
     
-    // On utilise le 4ème composant de objectColor (le .a ou .w) pour l'alpha
     FragColor = vec4(result, objectColor.a);
 }
