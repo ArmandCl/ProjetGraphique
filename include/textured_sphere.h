@@ -15,4 +15,4 @@ private:
     Texture *texture;
 };
 
-#endif // TEXTURED_SPHERE_H
+#endif

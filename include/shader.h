@@ -23,4 +23,4 @@ private:
     GLuint compile_shader(const std::string& path, GLenum shader_type);
 };
 
-#endif // SHADER_H
+#endif

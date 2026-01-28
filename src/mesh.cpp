@@ -14,21 +14,18 @@ Mesh::Mesh(Shader* shader, const char* objPath, Texture* texture, const char* ob
         glGenVertexArrays(1, &VAO);
         glBindVertexArray(VAO);
 
-        // Positions
         glGenBuffers(1, &VBO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
         glEnableVertexAttribArray(0);
 
-        // UV
         glGenBuffers(1, &TBO);
         glBindBuffer(GL_ARRAY_BUFFER, TBO);
         glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
         glEnableVertexAttribArray(1);
 
-        // Normals
         glGenBuffers(1, &NBO);
         glBindBuffer(GL_ARRAY_BUFFER, NBO);
         glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);

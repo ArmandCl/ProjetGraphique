@@ -2,7 +2,6 @@
 
 in vec3 fragColor;
 
-// output fragment color for OpenGL
 out vec4 out_color;
 
 void main() {

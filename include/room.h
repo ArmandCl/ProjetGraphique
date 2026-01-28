@@ -8,13 +8,13 @@
 
 class Room : public Shape {
 public:
-    // Constructeur sans textures
+    // constructeur sans textures
     Room(Shader* shader_program,
         float width = 5.0f,
         float height = 3.0f,
         float depth = 5.0f);
 
-    // UNIQUE constructeur avec textures (celui-ci gère aussi l'épaisseur)
+    // constructeur avec textures et epaisseur
     Room(Shader* shader_program,
         Texture* floor_texture,
         Texture* wall_texture,
@@ -22,7 +22,7 @@ public:
         float width, 
         float height, 
         float depth, 
-        float thickness = 0.15f); // Valeur par défaut ici
+        float thickness = 0.15f);
 
     virtual ~Room();
 

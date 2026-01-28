@@ -16,18 +16,16 @@
 
 int main()
 {
-    glEnable(GL_BLEND);//pour la transparence de la vitre
+    glEnable(GL_BLEND); // pour la transparence de la vitre
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     Viewer viewer;
     std::string shader_dir = SHADER_DIR;
 
-    // Shader pour les objets texturés
     Shader* texture_shader = new Shader(shader_dir + "texture.vert", shader_dir + "texture.frag");
     Shader* phong_color_shader = new Shader(shader_dir + "phong.vert", shader_dir + "phong_color.frag");
     Shader* phong_texture_shader = new Shader(shader_dir + "phong.vert", shader_dir + "phong.frag");
 
-    // Textures pour la pièce
     Texture* floor_texture = new Texture("textures\\floor.jpg");
     glBindTexture(GL_TEXTURE_2D, floor_texture->getGLid());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -42,16 +40,14 @@ int main()
     Texture* wood_texture = new Texture("textures\\wood.jpg");
     Texture* computer_texture = new Texture("textures\\black.jpg");
     Texture* lit_texture = new Texture("textures\\Lit_Atlas.png");
-    Texture* framed_texture = new Texture("textures\\framed.jpeg");
+    Texture* framed_texture = new Texture("textures\\csgo_screen.png");
 
-    // Texture métal pour les pieds
     Texture* metal_texture = new Texture("textures\\metal.jpg");
 
-    // === PIÈCE COMPLÈTE (plus carrée) ===
-    float scale_factor = 0.35f; // Réduction de 65% = 35% de la taille originale
-    float room_width = 5.0f * scale_factor;   // largeur: 1.75
-    float room_height = 4.0f * scale_factor;  // hauteur: 1.4
-    float room_depth = 5.0f * scale_factor;   // profondeur: 1.75 (plus carré!)
+    float scale_factor = 0.35f;
+    float room_width = 5.0f * scale_factor;
+    float room_height = 4.0f * scale_factor;
+    float room_depth = 5.0f * scale_factor;
     float wall_thickness = 0.15f;
 
     Shape* room = new Room(phong_texture_shader,
@@ -63,75 +59,58 @@ int main()
         room_depth,
         wall_thickness);
 
-    // La pièce est centrée à l'origine
-    glm::mat4 room_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.875f)); // Centre ajusté
+    glm::mat4 room_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.875f));
     Node* room_node = new Node(room_mat);
     room_node->add(room);
     viewer.scene_root->add(room_node);
 
-    // --- PARAMÈTRES DE LA VITRE (doivent correspondre au trou du Room.cpp) ---
     float hd = room_depth * 0.5f;
     float win_w = (room_width * 0.35f); 
     float win_h = (room_height * 0.45f);
-    float x_offset_trou = room_width * 0.2f; // Le décalage X qu'on a mis dans Room.cpp
+    float x_offset_trou = room_width * 0.2f;
 
-    // Création de la vitre
     Rectangle* glass = new Rectangle(phong_color_shader, win_w, win_h, 0.01f);
-    glass->setColor(glm::vec4(0.5f, 0.8f, 1.0f, 0.2f)); // Bleu clair transparent
+    glass->setColor(glm::vec4(0.5f, 0.8f, 1.0f, 0.2f));
 
-    // Positionnement : 
     float z_local_vitre = -hd - (wall_thickness * 0.5f) - 0.001f;
     float z_global_final = -0.875f + z_local_vitre; 
 
     glm::mat4 glass_mat = glm::translate(glm::mat4(1.0f), 
         glm::vec3(x_offset_trou, 0.0f, z_global_final));
-    /*glm::mat4 glass_mat = glm::translate(glm::mat4(1.0f), 
-        glm::vec3(x_offset_trou, 0.0f, z_fond-0.9f));*/
 
     Node* glass_node = new Node(glass_mat);
     glass_node->add(glass);
 
-    // IMPORTANT : Ajoute-le au room_node pour qu'il subisse le même déplacement global
-   // room_node->add(glass_node);
-
-    // === SPHÈRE AVEC LUMIÈRE ===
-
-    // On change le dernier paramètre (object_color) en blanc
     Shape* sphere = new LightingSphere(phong_color_shader,
-        glm::vec3(0.0f, 0.7f, 0.3f),  // Position lumière
-        glm::vec3(1.0f, 1.0f, 1.0f),  // Couleur lumière
-        glm::vec3(1.0f, 1.0f, 1.0f)); // Couleur de l'ampoule (BLANC)
+        glm::vec3(0.0f, 0.7f, 0.3f),  // position lumière
+        glm::vec3(1.0f, 1.0f, 1.0f),  // couleur lumière
+        glm::vec3(1.0f, 1.0f, 1.0f)); // couleur de l'ampoule
 
-    glm::mat4 sphere_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.35f, -0.875f)) // Ajusté
-        * glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f)); // Plus petite
+    glm::mat4 sphere_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.35f, -0.875f))
+        * glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f));
 
     Node* sphere_node = new Node(sphere_mat);
     sphere_node->add(sphere);
     viewer.scene_root->add(sphere_node);
 
-    // === BUREAU (dans la pièce) ===
     Shape* desk_top = new Rectangle(phong_texture_shader, wood_texture, 2.0f * scale_factor, 1.0f * scale_factor, 0.1f * scale_factor);
-    // Collé au mur arrière (qui est maintenant à Z = -0.875 - 0.875 = -1.75)
-    glm::mat4 desk_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.45f, -1.57f)) // Juste devant le mur arrière
+    glm::mat4 desk_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.45f, -1.57f))
         * glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
     Node* desk_node = new Node(desk_mat);
     desk_node->add(desk_top);
     viewer.scene_root->add(desk_node);
 
-    // === PIEDS DE BUREAU ===
-    float leg_height = 0.65f * scale_factor;  // 0.245
-    float leg_radius = 0.05f * scale_factor; // 0.0175
+    float leg_height = 0.65f * scale_factor;
+    float leg_radius = 0.05f * scale_factor;
     int slices = 32;
 
     std::vector<glm::vec3> leg_positions = {
-        // Pieds "avant" (côté centre) - les DEUX du même côté
-        glm::vec3(-0.75f, -0.58f, -1.45f),   // Gauche avant
-        glm::vec3(-0.2275f, -0.58f, -1.45f),   // Droite avant
+        glm::vec3(-0.75f, -0.58f, -1.45f),
+        glm::vec3(-0.2275f, -0.58f, -1.45f),
 
-        // Pieds "arrière" (côté mur) - mais pas trop loin
-        glm::vec3(-0.75f, -0.58f, -1.71f),   // Gauche arrière
-        glm::vec3(-0.2275f, -0.58f, -1.71f)    // Droite arrière
+        glm::vec3(-0.75f, -0.58f, -1.71f),
+        glm::vec3(-0.2275f, -0.58f, -1.71f)
     };
 
     for (const auto& pos : leg_positions) {
@@ -145,13 +124,10 @@ int main()
         viewer.scene_root->add(leg_node);
     }
 
-    // === AFFICHE SUR LE MUR ===
-    Texture* poster_texture = new Texture("textures\\poster.jpg");
+    Texture* poster_texture = new Texture("textures\\csgo_poster.png");
 
-    // Affiche plus petite proportionnellement
     Shape* poster = new Rectangle(phong_texture_shader, poster_texture, 0.8f * scale_factor, 1.0f * scale_factor, 0.02f * scale_factor);
 
-    // Remplace ton bloc poster_mat par celui-ci :
     glm::mat4 poster_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.865f, 0.0f, -0.875f))
         * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f)); 
 
@@ -167,6 +143,8 @@ int main()
     Mesh* fan1_computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cylinder.001");
     Mesh* fan2_computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cylinder.002");
     Mesh* fan3_computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cylinder.003");
+
+    Mesh* chair = new Mesh(phong_texture_shader, "models\\chair.obj", computer_texture);
 
     Mesh* keyboard = new Mesh(phong_texture_shader, "models\\keyboard.obj", computer_texture);
     Mesh* lit = new Mesh(phong_texture_shader, "models\\lit.obj", lit_texture);
@@ -189,6 +167,15 @@ int main()
     Node* mesh_node_chevet = new Node(mesh_chevet);
     mesh_node_chevet->add(chevet);
     viewer.scene_root->add(mesh_node_chevet);
+
+    //integration chair
+    glm::mat4 mesh_chair = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.58f, -1.15f))
+        * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)) // Rotation 180° pour faire face au bureau
+        * glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)); // Échelle ajustée (0.1 était souvent trop gros pour les .obj bruts)
+
+    Node* mesh_node_chair = new Node(mesh_chair);
+    mesh_node_chair->add(chair);
+    viewer.scene_root->add(mesh_node_chair);
 
     //integration computer
     glm::mat4 mesh_computer = glm::translate(glm::mat4(1.0f), glm::vec3(-0.78f, -0.34f, -1.58f))
@@ -232,15 +219,15 @@ int main()
     mesh_node_mouse->add(mouse);
     viewer.scene_root->add(mesh_node_mouse);
     
-    // Intégration du lit
+    //integration lit
     glm::mat4 mesh_lit = glm::translate(glm::mat4(1.0f), glm::vec3(0.58f, -0.56f, -0.25f))
-        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));  // Rotation pour orienter le lit
+        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 
     Node* mesh_node_lit = new Node(mesh_lit);
     mesh_node_lit->add(lit);
     viewer.scene_root->add(mesh_node_lit);
     
-    // Intégration de l'écran d'ordinateur
+    //integration ecran
     glm::mat4 mesh_ecran = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.3132f, -1.65f)) 
         * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f))
         * glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f));
@@ -249,23 +236,21 @@ int main()
     mesh_node_ecran->add(monitor);
     viewer.scene_root->add(mesh_node_ecran);
 
-    //integration d'une image sur l'écran
-    float screen_w = 0.31f; // Largeur ajustée pour le moniteur
-    float screen_h = 0.169f; // Hauteur ajustée (format 16:9 approx)
+    float screen_w = 0.31f;
+    float screen_h = 0.169f;
 
     Shape* screen_display = new Rectangle(texture_shader, framed_texture, screen_w, screen_h, 0.0001f);
     glm::mat4 screen_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.285f, -1.63f)) 
-        * glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f)); // MIRROIR HORIZONTAL
+        * glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
     Node* screen_node = new Node(screen_mat);
     screen_node->add(screen_display);
     viewer.scene_root->add(screen_node);
 
-    // 1. Définir les paramètres une seule fois
     glm::vec3 lp(0.0f, 0.7f, -0.875f);
     glm::vec3 lc(1.0f, 1.0f, 1.0f);
 
-    // 2. Envoyer à tous les objets (Casting nécessaire pour Shape*)
+    chair->setLight(lp, lc);
     lamp->cast_shadow = false;
     lamp->setLight(lp, lc);
     ((Rectangle*)desk_top)->setLight(lp, lc);
@@ -279,13 +264,10 @@ int main()
     chevet->setLight(lp, lc);
     glass->setLight(lp, lc);
 
-    //viewer.scene_root->add(room_node); // La pièce d'abord
-    viewer.scene_root->add(glass_node); // LA VITRE EN DERNIER
+    viewer.scene_root->add(glass_node);
 
-    // Maintenant on peut lancer le viewer
     viewer.run();
 
-    // Nettoyage
     delete texture_shader;
     delete wood_texture;
     delete metal_texture;

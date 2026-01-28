@@ -14,53 +14,42 @@ uniform sampler2D shadowMap;
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
-    
-    // 2. Transformer l'intervalle [-1,1] en [0,1]
     projCoords = projCoords * 0.5 + 0.5;
     
-    // Si on est en dehors de la carte d'ombre (derrière la lumière), pas d'ombre
-    if(projCoords.z > 1.0)
-        return 0.0;
-
-    // 3. Lire la profondeur enregistrée dans la texture
-    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+    if(projCoords.z > 1.0) return 0.0;
     
-    // 4. Profondeur actuelle du pixel
     float currentDepth = projCoords.z;
+    float bias = max(0.005 * (1.0 - dot(Normal, normalize(LightPos - FragPos))), 0.0005);
     
-    // 5. Biais pour éviter l'acné d'ombre (Rayures noires)
-    // Avec le Front Face Culling activé dans viewer.cpp, un petit biais suffit
-    float bias = 0.001;
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+    for(int x = -1; x <= 1; ++x) {
+        for(int y = -1; y <= 1; ++y) {
+            float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+            shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
+        }    
+    }
+    shadow /= 9.0;
     
-    // Comparaison
-    float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
-
     return shadow;
 }
 
 void main()
 {
-    // Paramètres de lumière
-    float ambientIntensity = 0.2;
-    float diffuseIntensity = 0.8;
-
-    // 2. Ambiant
-    vec3 ambient = ambientIntensity * lightColor;
-
-    // Diffus
+    vec3 texColor = texture(diffuse_map, TexCoords).rgb;
     vec3 norm = normalize(Normal);
+    
+    // ambiant
+    vec3 ambient = 0.2 * lightColor;
+    
+    // diffus
     vec3 lightDir = normalize(LightPos - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * diffuseIntensity * lightColor;
-
-    // Texture
-    vec3 texColor = texture(diffuse_map, TexCoords).rgb;
+    vec3 diffuse = diff * 0.8 * lightColor;
     
-    // 5. Calcul de l'ombre
+    // ombre
     float shadow = ShadowCalculation(FragPosLightSpace);
-
-    // 6. Combinaison finale
-    // L'ombre n'affecte que le diffus (et le spéculaire si tu en as), pas l'ambiant
+    
     vec3 result = (ambient + (1.0 - shadow) * diffuse) * texColor;
     
     FragColor = vec4(result, 1.0);

@@ -5,7 +5,6 @@
 #include "glm/ext.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-// Variables globales pour les callbacks
 bool keys[1024] = { false };
 
 Viewer::Viewer(int width, int height)
@@ -25,7 +24,6 @@ Viewer::Viewer(int width, int height)
     delta_time(0.0f),
     last_frame(0.0f)
 {
-    // Initializez le tableau keys
     for (int i = 0; i < 1024; i++) {
         keys[i] = false;
     }
@@ -41,7 +39,6 @@ Viewer::Viewer(int width, int height)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-
     win = glfwCreateWindow(width, height, "Viewer - Camera Libre", NULL, NULL);
 
     if (win == NULL) {
@@ -58,7 +55,6 @@ Viewer::Viewer(int width, int height)
 
     glfwSetWindowUserPointer(win, this);
 
-    // Callbacks
     glfwSetKeyCallback(win, key_callback_static);
     glfwSetCursorPosCallback(win, mouse_callback_static);
     glfwSetScrollCallback(win, scroll_callback_static);
@@ -66,7 +62,6 @@ Viewer::Viewer(int width, int height)
 
     glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    // Info OpenGL
     std::cout << glGetString(GL_VERSION) << ", GLSL "
         << glGetString(GL_SHADING_LANGUAGE_VERSION) << ", Renderer "
         << glGetString(GL_RENDERER) << std::endl;
@@ -75,7 +70,6 @@ Viewer::Viewer(int width, int height)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    // --- INITIALISATION OMBRES ---
     depthShader = new Shader("shaders/shadow_depth.vert", "shaders/shadow_depth.frag");
 
     glGenFramebuffers(1, &depthMapFBO);
@@ -110,7 +104,6 @@ void Viewer::run() {
         delta_time = current_frame - last_frame;
         last_frame = current_frame;
 
-        // Animation ventilateurs
         float rotation_speed = 13.0f;
         float angle = current_frame * rotation_speed;
 
@@ -123,7 +116,6 @@ void Viewer::run() {
             fan_nodes[i]->set_transform(transform);
         }
 
-        // Caméra
         if (is_free_camera) {
             process_movement();
         } else {
@@ -137,52 +129,35 @@ void Viewer::run() {
             camera_up = glm::normalize(glm::cross(camera_right, camera_front));
         }
 
-        // Rendu
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = glm::lookAt(camera_position, camera_position + camera_front, camera_up);
         glm::mat4 projection = glm::perspective(glm::radians(zoom), (float)window_width / (float)window_height, 0.1f, 100.0f);
 
-        // --- Configuration Lumière (Mode Spot/Ampoule) ---
-        // 1. Position : Sous l'abat-jour
         glm::vec3 lightPos(0.0f, 0.6f, -0.875f); 
-        // 2. Cible : Le sol
-        glm::vec3 lightTarget(0.0f, -1.0f, -0.875f);
+        glm::vec3 lightTarget(0.0f, -1.0f, -0.875f); // vise le sol
 
-        // 3. Projection : PERSPECTIVE (Cône de lumière)
         float aspect = (float)SHADOW_WIDTH / (float)SHADOW_HEIGHT;
         float near_plane = 0.1f; 
         float far_plane = 10.0f;
-        glm::mat4 lightProjection = glm::perspective(glm::radians(120.0f), aspect, near_plane, far_plane);
+        glm::mat4 lightProjection = glm::perspective(glm::radians(80.0f), aspect, near_plane, far_plane);
 
         // 4. Vue
         glm::mat4 lightView = glm::lookAt(lightPos, lightTarget, glm::vec3(0.0f, 0.0f, 1.0f)); 
         glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 
 
-        // --- PASSE 1 : RENDU DE L'OMBRE ---
         glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
         glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
-
-        // Face Culling pour corriger le "Peter Panning"
-        // (Optionnel : si ça bugue chez toi, commente ces 2 lignes)
-        // glEnable(GL_CULL_FACE);
-        // glCullFace(GL_FRONT); 
 
         depthShader->use();
         depthShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
         scene_root->drawShadow(depthShader, glm::mat4(1.0f)); 
 
-        // Reset Face Culling
-        // (Et ces 2 lignes aussi si tu as commenté au-dessus)
-        // glCullFace(GL_BACK);
-        // glDisable(GL_CULL_FACE);
-
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        // --- PASSE 2 : RENDU NORMAL ---
         glViewport(0, 0, window_width, window_height);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -193,7 +168,6 @@ void Viewer::run() {
     }
 }
 
-// Callbacks (inchangés)
 void Viewer::key_callback_static(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Viewer* viewer = static_cast<Viewer*>(glfwGetWindowUserPointer(window));
     viewer->on_key(key, action);

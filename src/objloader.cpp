@@ -51,7 +51,6 @@ bool loadOBJ(const char* path, std::vector<glm::vec3>& out_vertices, std::vector
             temp_normals.push_back(normal);
         }
         else if (strcmp(lineHeader, "f") == 0) {
-            // C'est ici qu'on filtre ! Si on n'est pas sur le bon objet, on ignore la face.
             if (!reading_target) {
                 char buffer[1000];
                 fgets(buffer, 1000, file); 
@@ -73,7 +72,6 @@ bool loadOBJ(const char* path, std::vector<glm::vec3>& out_vertices, std::vector
         }
     }
 
-    // Reconstruction du mesh final
     for (unsigned int i = 0; i < vertexIndices.size(); i++) {
         unsigned int vIndex = vertexIndices[i] - 1;
         if (vIndex < temp_vertices.size()) out_vertices.push_back(temp_vertices[vIndex]);

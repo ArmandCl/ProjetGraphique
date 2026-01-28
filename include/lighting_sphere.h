@@ -21,4 +21,4 @@ private:
     GLint object_color_loc;
 };
 
-#endif // LIGHTING_SPHERE_H
+#endif

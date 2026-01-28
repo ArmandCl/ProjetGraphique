@@ -41,4 +41,4 @@ private:
     bool has_texture_;
 };
 
-#endif // CYLINDER_H
+#endif

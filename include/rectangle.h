@@ -32,7 +32,7 @@ private:
     unsigned int vertex_count;
     glm::vec3 lightPos;
     glm::vec3 lightColor;
-    glm::vec4 object_color = glm::vec4(1.0f); // Blanc par défaut
+    glm::vec4 object_color = glm::vec4(1.0f);
 };
 
-#endif // RECTANGLE_H
+#endif
