@@ -5,8 +5,6 @@
 #include "glm/ext.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-// Variables globales pour les callbacks (on utilise le user pointer � la place)
-// Mais on garde une r�f�rence pour les touches
 bool keys[1024] = { false };
 
 Viewer::Viewer(int width, int height)
@@ -26,7 +24,6 @@ Viewer::Viewer(int width, int height)
     delta_time(0.0f),
     last_frame(0.0f)
 {
-    // Initializez le tableau keys
     for (int i = 0; i < 1024; i++) {
         keys[i] = false;
     }
@@ -36,14 +33,13 @@ Viewer::Viewer(int width, int height)
         glfwTerminate();
     }
 
-    // Version hints
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
-    win = glfwCreateWindow(width, height, "Viewer - Cam�ra Libre", NULL, NULL);
+    win = glfwCreateWindow(width, height, "Viewer", NULL, NULL);
 
     if (win == NULL) {
         std::cerr << "Failed to create window" << std::endl;
@@ -57,29 +53,19 @@ Viewer::Viewer(int width, int height)
         glfwTerminate();
     }
 
-    // Set user pointer pour acc�der � l'instance dans les callbacks
     glfwSetWindowUserPointer(win, this);
 
-    // Enregistrement des callbacks
     glfwSetKeyCallback(win, key_callback_static);
     glfwSetCursorPosCallback(win, mouse_callback_static);
     glfwSetScrollCallback(win, scroll_callback_static);
     glfwSetFramebufferSizeCallback(win, framebuffer_size_callback_static);
 
-    // Cache le curseur et le capture
     glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    // Message d'information
-    std::cout << glGetString(GL_VERSION) << ", GLSL "
-        << glGetString(GL_SHADING_LANGUAGE_VERSION) << ", Renderer "
-        << glGetString(GL_RENDERER) << std::endl;
-
-    // Initialisation OpenGL
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    // --- INITIALISATION OMBRES ---
     depthShader = new Shader("shaders/shadow_depth.vert", "shaders/shadow_depth.frag");
 
     glGenFramebuffers(1, &depthMapFBO);
@@ -99,10 +85,7 @@ Viewer::Viewer(int width, int height)
     glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    // Initialisation de la sc�ne
     scene_root = new Node();
-
-    // Initialisation des vecteurs de la cam�ra
     update_camera_vectors();
 }
 
@@ -113,7 +96,6 @@ Viewer::~Viewer() {
 
 void Viewer::run() {
     while (!glfwWindowShouldClose(win)) {
-        // Calcul du delta time
         float current_frame = glfwGetTime();
         delta_time = current_frame - last_frame;
         last_frame = current_frame;
@@ -122,74 +104,52 @@ void Viewer::run() {
 
         for (size_t i = 0; i < fan_nodes.size(); i++) {
             if (i >= fan_centers.size()) break;
-            
             glm::vec3 center = fan_centers[i];
-
-            // LA FORMULE MAGIQUE DU PIVOT : T(C) * R * T(-C)
             glm::mat4 transform = glm::translate(glm::mat4(1.0f), center) 
                                 * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0, 0, 1))
                                 * glm::translate(glm::mat4(1.0f), -center);
-            
             fan_nodes[i]->set_transform(transform);
         }
 
-        // Logique de la caméra
         if (is_free_camera) {
-            process_movement(); // ZQSD + Souris
+            process_movement();
         } else {
-            // MODE ORBITAL : La caméra tourne autour de la pièce
             float time = glfwGetTime() * orbit_speed;
-            
-            // Calcul de la position circulaire (X, Z)
-            // On soustrait 0.875f à Z car ta pièce est centrée à cet endroit dans main.cpp
             camera_position.x = sin(time) * orbit_radius;
             camera_position.z = cos(time) * orbit_radius - 0.875f;
             camera_position.y = orbit_height;
 
-            // La caméra regarde le centre de la pièce
             glm::vec3 target = glm::vec3(0.0f, 0.0f, -0.875f);
             camera_front = glm::normalize(target - camera_position);
-            
-            // Recalcul manuel des vecteurs pour éviter les tremblements
             camera_right = glm::normalize(glm::cross(camera_front, world_up));
             camera_up = glm::normalize(glm::cross(camera_right, camera_front));
         }
 
-        // Nettoyage et dessin
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = glm::lookAt(camera_position, camera_position + camera_front, camera_up);
         glm::mat4 projection = glm::perspective(glm::radians(zoom), (float)window_width / (float)window_height, 0.1f, 100.0f);
 
-        // 1. Configuration de la caméra "Lumière"
-        glm::vec3 lightPos(0.0f, 0.7f, -0.875f); // Position de ta lampe (copiée du main.cpp)
+        glm::vec3 lightPos(0.0f, 0.7f, -0.875f);
         float near_plane = 0.1f, far_plane = 10.0f;
         glm::mat4 lightProjection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, near_plane, far_plane);
         glm::mat4 lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 
-        // --- PASSE 1 : RENDU DE L'OMBRE ---
         glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
         glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
 
         depthShader->use();
         depthShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
-        // On appelle une nouvelle méthode drawShadow (à créer plus bas)
         scene_root->drawShadow(depthShader, glm::mat4(1.0f)); 
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        // --- PASSE 2 : RENDU NORMAL ---
         glViewport(0, 0, window_width, window_height);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // IMPORTANT : Il faut envoyer la matrice et la texture aux shaders
-        // Note: Idéalement, il faudrait le faire pour chaque Shader utilisé, 
-        // mais ici on suppose que tes objets utilisent "phong_texture_shader"
-        // Tu devras peut-être ajouter une méthode "setShadowMap" à tes Nodes.
-        // Pour l'instant, on dessine la scène normalement :
         scene_root->draw(model, view, projection, lightSpaceMatrix, depthMap);
 
         glfwSwapBuffers(win);
@@ -197,47 +157,17 @@ void Viewer::run() {
     }
 }
 
-// ============ CALLBACKS STATIQUES ============
-
-void Viewer::key_callback_static(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    Viewer* viewer = static_cast<Viewer*>(glfwGetWindowUserPointer(window));
-    viewer->on_key(key, action);
-}
-
-void Viewer::mouse_callback_static(GLFWwindow* window, double xpos, double ypos) {
-    Viewer* viewer = static_cast<Viewer*>(glfwGetWindowUserPointer(window));
-    viewer->on_mouse(xpos, ypos);
-}
-
-void Viewer::scroll_callback_static(GLFWwindow* window, double xoffset, double yoffset) {
-    Viewer* viewer = static_cast<Viewer*>(glfwGetWindowUserPointer(window));
-    viewer->on_scroll(xoffset, yoffset);
-}
-
-void Viewer::framebuffer_size_callback_static(GLFWwindow* window, int width, int height) {
-    Viewer* viewer = static_cast<Viewer*>(glfwGetWindowUserPointer(window));
-    viewer->on_framebuffer_size(width, height);
-}
-
-// ============ M�THODES D'INSTANCE ============
-
 void Viewer::on_key(int key, int action) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(win, GLFW_TRUE);
     }
 
-    // Touche 'C' pour changer de mode
     if (key == GLFW_KEY_C && action == GLFW_PRESS) {
-            is_free_camera = !is_free_camera;
+        is_free_camera = !is_free_camera;
         
         if (is_free_camera) {
-            // --- SYNCHRONISATION DES ANGLES ---
-            // On calcule le Yaw et le Pitch à partir du camera_front actuel 
-            // pour que le mode libre commence exactement là où l'orbite s'est arrêtée.
-            
             pitch = glm::degrees(asin(camera_front.y));
             yaw = glm::degrees(atan2(camera_front.z, camera_front.x));
-
             glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             first_mouse = true; 
         } else {
@@ -252,7 +182,6 @@ void Viewer::on_key(int key, int action) {
             glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 
-    // Enregistrement des touches (seulement utile en mode libre)
     if (key >= 0 && key < 1024) {
         if (action == GLFW_PRESS) keys[key] = true;
         else if (action == GLFW_RELEASE) keys[key] = false;
@@ -260,7 +189,6 @@ void Viewer::on_key(int key, int action) {
 }
 
 void Viewer::on_mouse(double xpos, double ypos) {
-    // Si on n'est pas en mode libre, on ignore les mouvements de souris
     if (!is_free_camera) return;
 
     if (first_mouse) {
@@ -288,10 +216,8 @@ void Viewer::on_mouse(double xpos, double ypos) {
 
 void Viewer::on_scroll(double xoffset, double yoffset) {
     zoom -= (float)yoffset;
-    if (zoom < 1.0f)
-        zoom = 1.0f;
-    if (zoom > 45.0f)
-        zoom = 45.0f;
+    if (zoom < 1.0f) zoom = 1.0f;
+    if (zoom > 45.0f) zoom = 45.0f;
 }
 
 void Viewer::on_framebuffer_size(int width, int height) {
@@ -316,21 +242,33 @@ void Viewer::process_movement() {
     if (keys[GLFW_KEY_LEFT_CONTROL] || keys[GLFW_KEY_RIGHT_CONTROL])
         camera_position -= world_up * velocity;
 
-    // Vitesse accrue avec Shift
     if (keys[GLFW_KEY_LEFT_SHIFT] || keys[GLFW_KEY_RIGHT_SHIFT]) {
         velocity *= 2.0f;
     }
 }
 
 void Viewer::update_camera_vectors() {
-    // Calculer le nouveau vecteur front
     glm::vec3 front;
     front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     front.y = sin(glm::radians(pitch));
     front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     camera_front = glm::normalize(front);
-
-    // Recalculer right et up
     camera_right = glm::normalize(glm::cross(camera_front, world_up));
     camera_up = glm::normalize(glm::cross(camera_right, camera_front));
+}
+
+void Viewer::key_callback_static(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    static_cast<Viewer*>(glfwGetWindowUserPointer(window))->on_key(key, action);
+}
+
+void Viewer::mouse_callback_static(GLFWwindow* window, double xpos, double ypos) {
+    static_cast<Viewer*>(glfwGetWindowUserPointer(window))->on_mouse(xpos, ypos);
+}
+
+void Viewer::scroll_callback_static(GLFWwindow* window, double xoffset, double yoffset) {
+    static_cast<Viewer*>(glfwGetWindowUserPointer(window))->on_scroll(xoffset, yoffset);
+}
+
+void Viewer::framebuffer_size_callback_static(GLFWwindow* window, int width, int height) {
+    static_cast<Viewer*>(glfwGetWindowUserPointer(window))->on_framebuffer_size(width, height);
 }

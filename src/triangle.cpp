@@ -25,7 +25,6 @@ Triangle::~Triangle() {
     glDeleteBuffers(1, &VBO);
 }
 
-// src/triangle.cpp
 
 void Triangle::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap) {
 
@@ -33,7 +32,6 @@ void Triangle::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, gl
 
     glBindVertexArray( VAO );
 
-    // --- APPEL CRUCIAL AU PARENT ---
     Shape::draw(model, view, projection, lightSpaceMatrix, shadowMap);
 
     glDrawArrays( GL_TRIANGLES, 0, 3 );

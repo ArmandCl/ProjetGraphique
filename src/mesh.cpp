@@ -21,14 +21,14 @@ Mesh::Mesh(Shader* shader, const char* objPath, Texture* texture, const char* ob
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
         glEnableVertexAttribArray(0);
 
-        // UVs (Location 1)
+        // UV
         glGenBuffers(1, &TBO);
         glBindBuffer(GL_ARRAY_BUFFER, TBO);
         glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
         glEnableVertexAttribArray(1);
 
-        // Normals (Location 2 pour ton shader phong)
+        // Normals
         glGenBuffers(1, &NBO);
         glBindBuffer(GL_ARRAY_BUFFER, NBO);
         glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
@@ -42,10 +42,8 @@ Mesh::Mesh(Shader* shader, const char* objPath, Texture* texture, const char* ob
 void Mesh::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap) {
     glUseProgram(this->shader_program_);
 
-    // --- AJOUTE CECI ICI ---
     glUniform3f(glGetUniformLocation(this->shader_program_, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
     glUniform3f(glGetUniformLocation(this->shader_program_, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
-    // -----------------------
 
     if (has_texture_ && texture_) {
         glActiveTexture(GL_TEXTURE0);

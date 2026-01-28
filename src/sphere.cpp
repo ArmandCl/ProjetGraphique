@@ -13,26 +13,24 @@ Sphere::Sphere(Shader* shader_program, int sector_count, int stack_count) :
 
     glGenBuffers(3, &buffers[0]);
 
-    // Position attribute
+    // Position 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     
-    // Normal attribute
+    // Normal 
     glEnableVertexAttribArray(2);
     glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     
-    // Index buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
     num_indices = static_cast<unsigned int>(indices.size());
 }
 
-// src/sphere.cpp
 
 void Sphere::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap)
 {
@@ -40,7 +38,6 @@ void Sphere::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm:
 
     glBindVertexArray(VAO);  
 
-    // --- APPEL CRUCIAL AU PARENT ---
     Shape::draw(model, view, projection, lightSpaceMatrix, shadowMap);
 
     glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, nullptr);
@@ -48,7 +45,6 @@ void Sphere::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm:
 
 void Sphere::buildVertices()
 {
-    // Clear the vertex list
     vertices.clear();
     normals.clear();
 

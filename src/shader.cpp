@@ -5,7 +5,6 @@
 #include <cstdio>
 #include <cstdlib>
 
-// AJOUTE CECI POUR CORRIGER L'ERREUR 'value_ptr identifier not found'
 #include <glm/gtc/type_ptr.hpp> 
 
 using namespace std;
@@ -78,18 +77,15 @@ GLuint Shader::compile_shader(const std::string& path, GLenum shader_type) {
     return shader;
 }
 
-// --- CORRECTIONS ICI ---
 
 void Shader::use() const {
-    glUseProgram(glid); // Remplace 'ID' par 'glid'
+    glUseProgram(glid); 
 }
 
 void Shader::setMat4(const std::string &name, const glm::mat4 &mat) const {
-    // Remplace 'ID' par 'glid' et assure-toi d'avoir l'include type_ptr en haut
     glUniformMatrix4fv(glGetUniformLocation(glid, name.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
 }
 
 void Shader::setInt(const std::string &name, int value) const {
-    // Remplace 'ID' par 'glid'
     glUniform1i(glGetUniformLocation(glid, name.c_str()), value);
 }
