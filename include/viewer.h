@@ -29,13 +29,13 @@ public:
     Node* scene_root;
 
 private:
-    // M�thodes de callback statiques
+    // callback statiques
     static void key_callback_static(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void mouse_callback_static(GLFWwindow* window, double xpos, double ypos);
     static void scroll_callback_static(GLFWwindow* window, double xoffset, double yoffset);
     static void framebuffer_size_callback_static(GLFWwindow* window, int width, int height);
 
-    // M�thodes d'instance
+    // instance
     void on_key(int key, int action);
     void on_mouse(double xpos, double ypos);
     void on_scroll(double xoffset, double yoffset);
@@ -52,7 +52,7 @@ private:
     const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
     Shader* depthShader;
 
-    // Variables de cam�ra
+    // Variables de cam
     glm::vec3 camera_position;
     glm::vec3 camera_front;
     glm::vec3 camera_up;
@@ -68,7 +68,7 @@ private:
     float yaw;
     float pitch;
 
-    // �tat des touches
+    // etat des touches
     bool keys[1024];
 
     // Souris

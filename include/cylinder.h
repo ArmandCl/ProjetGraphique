@@ -29,7 +29,7 @@ private:
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
-    unsigned int TBO;  // Texture buffer
+    unsigned int TBO;  
     unsigned int num_indices;
 
     std::vector<glm::vec3> vertices;

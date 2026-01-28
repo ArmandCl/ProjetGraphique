@@ -16,7 +16,6 @@ private:
     glm::vec3 light_color;
     glm::vec3 object_color;
 
-    // uniform locations
     GLint light_pos_loc;
     GLint light_color_loc;
     GLint object_color_loc;
