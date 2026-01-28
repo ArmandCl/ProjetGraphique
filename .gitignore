@@ -376,7 +376,7 @@ compile_commands.json
 CTestTestfile.cmake
 *.cmake
 
-# Exécutables et libs générés
+# Exï¿½cutables et libs gï¿½nï¿½rï¿½s
 *.exe
 *.out
 *.app
@@ -386,7 +386,7 @@ CTestTestfile.cmake
 *.lib
 *.a
 
-# Shaders compilés (si vous compilez vos shaders)
+# Shaders compilï¿½s (si vous compilez vos shaders)
 *.spv
 *.cso
 *.bin
@@ -408,3 +408,5 @@ CTestTestfile.cmake
 *~
 *.swp
 *.swo
+
+run.ps1

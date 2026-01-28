@@ -30,7 +30,7 @@ int main()
     Texture* ceiling_texture = new Texture("textures\\wood.jpg");
     Texture* wood_texture = new Texture("textures\\wood.jpg");
     Texture* computer_texture = new Texture("textures\\black.jpg");
-    Texture* lit_texture = new Texture("textures\\test.jpg");
+    //Texture* lit_texture = new Texture("textures\\white_sheet2.jpg");
     Texture* framed_texture = new Texture("textures\\framed.jpeg");
 
     // Texture métal pour les pieds
@@ -125,7 +125,7 @@ int main()
     Mesh* chevet = new Mesh(phong_texture_shader, "models\\chevet.obj", wood_texture);
     Mesh* computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture);
     Mesh* keyboard = new Mesh(phong_texture_shader, "models\\keyboard.obj", computer_texture);
-    Mesh* lit = new Mesh(phong_texture_shader, "models\\test.obj", lit_texture);
+    Mesh* lit = new Mesh(phong_texture_shader, "models\\lit.obj", wood_texture);
     Mesh* monitor = new Mesh(phong_texture_shader, "models\\monitor.obj", computer_texture);
     Mesh* mouse = new Mesh(phong_texture_shader, "models\\mouse.obj", computer_texture);
 
@@ -237,7 +237,6 @@ int main()
     delete poster_texture;
     delete framed_texture;
     delete computer_texture;
-    delete lit_texture;
     delete phong_color_shader;
     delete phong_texture_shader;
     
