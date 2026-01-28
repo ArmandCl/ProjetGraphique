@@ -143,10 +143,10 @@ int main()
     // Affiche plus petite proportionnellement
     Shape* poster = new Rectangle(phong_texture_shader, poster_texture, 0.8f * scale_factor, 1.0f * scale_factor, 0.02f * scale_factor);
 
-    glm::mat4 poster_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.865f, 0.0f, -0.875f))// sur le mur de gauche
-        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f))
-        * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f))
-        * glm::scale(glm::mat4(1.0f), glm::vec3(-1.0f, 1.0f, 1.0f));
+    // Remplace ton bloc poster_mat par celui-ci :
+    glm::mat4 poster_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.865f, 0.0f, -0.875f))
+        * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f)); 
+
 
     Node* poster_node = new Node(poster_mat);
     poster_node->add(poster);
@@ -247,9 +247,8 @@ int main()
 
     Shape* screen_display = new Rectangle(texture_shader, framed_texture, screen_w, screen_h, 0.0001f);
     glm::mat4 screen_mat = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.285f, -1.63f)) 
-        * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f)) // Ton réglage actuel
-        * glm::scale(glm::mat4(1.0f), glm::vec3(-1.0f, 1.0f, 1.0f)); // MIRROIR HORIZONTAL
-        
+        * glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f)); // MIRROIR HORIZONTAL
+
     Node* screen_node = new Node(screen_mat);
     screen_node->add(screen_display);
     viewer.scene_root->add(screen_node);
