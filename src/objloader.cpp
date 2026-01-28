@@ -3,7 +3,8 @@
 #include <cstring>
 #include <string>
 
-bool loadOBJ(const char* path, std::vector<glm::vec3>& out_vertices, std::vector<glm::vec2>& out_uvs, std::vector<glm::vec3>& out_normals) {
+// Remplace tout ton loadOBJ par cette version améliorée :
+bool loadOBJ(const char* path, std::vector<glm::vec3>& out_vertices, std::vector<glm::vec2>& out_uvs, std::vector<glm::vec3>& out_normals, const char* target_object_name) {
     std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
     std::vector<glm::vec3> temp_vertices;
     std::vector<glm::vec2> temp_uvs;
@@ -15,12 +16,29 @@ bool loadOBJ(const char* path, std::vector<glm::vec3>& out_vertices, std::vector
         return false;
     }
 
+    bool reading_target = (target_object_name == nullptr); // Si pas de nom, on lit tout par défaut
+    char current_object[128] = "";
+
     while (1) {
         char lineHeader[128];
         int res = fscanf(file, "%s", lineHeader);
         if (res == EOF) break;
 
-        if (strcmp(lineHeader, "v") == 0) {
+        // --- GESTION DES NOMS D'OBJETS ---
+        if (strcmp(lineHeader, "o") == 0) {
+            fscanf(file, "%s", current_object);
+            if (target_object_name != nullptr) {
+                // On active la lecture seulement si le nom correspond
+                if (strcmp(current_object, target_object_name) == 0) {
+                    reading_target = true;
+                } else {
+                    reading_target = false;
+                }
+            }
+        }
+        // ---------------------------------
+
+        else if (strcmp(lineHeader, "v") == 0) {
             glm::vec3 vertex;
             fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
             temp_vertices.push_back(vertex);
@@ -36,10 +54,18 @@ bool loadOBJ(const char* path, std::vector<glm::vec3>& out_vertices, std::vector
             temp_normals.push_back(normal);
         }
         else if (strcmp(lineHeader, "f") == 0) {
+            // C'est ici qu'on filtre ! Si on n'est pas sur le bon objet, on ignore la face.
+            if (!reading_target) {
+                char buffer[1000];
+                fgets(buffer, 1000, file); // On consomme la ligne pour avancer
+                continue;
+            }
+
             unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
             int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
             if (matches != 9) {
-                printf("Erreur de format OBJ. Essaye d'exporter avec UVs et Normales.\n");
+                printf("Erreur format OBJ (UVs manquantes ?)\n");
+                fclose(file); // Toujours fermer le fichier en cas d'erreur
                 return false;
             }
             for (int i = 0; i < 3; i++) {
@@ -50,10 +76,17 @@ bool loadOBJ(const char* path, std::vector<glm::vec3>& out_vertices, std::vector
         }
     }
 
+    // Reconstruction du mesh final
     for (unsigned int i = 0; i < vertexIndices.size(); i++) {
-        out_vertices.push_back(temp_vertices[vertexIndices[i] - 1]);
-        out_uvs.push_back(temp_uvs[uvIndices[i] - 1]);
-        out_normals.push_back(temp_normals[normalIndices[i] - 1]);
+        unsigned int vIndex = vertexIndices[i] - 1;
+        // Sécurité pour éviter le crash si indices hors bornes
+        if (vIndex < temp_vertices.size()) out_vertices.push_back(temp_vertices[vIndex]);
+        
+        unsigned int uvIndex = uvIndices[i] - 1;
+        if (uvIndex < temp_uvs.size()) out_uvs.push_back(temp_uvs[uvIndex]);
+
+        unsigned int nIndex = normalIndices[i] - 1;
+        if (nIndex < temp_normals.size()) out_normals.push_back(temp_normals[nIndex]);
     }
     fclose(file);
     return true;

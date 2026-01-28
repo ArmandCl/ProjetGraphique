@@ -123,7 +123,12 @@ int main()
 
     Mesh* lamp = new Mesh(phong_texture_shader, "models\\lamp.obj", wood_texture);
     Mesh* chevet = new Mesh(phong_texture_shader, "models\\chevet.obj", wood_texture);
-    Mesh* computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture);
+
+    Mesh* computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cube");
+    Mesh* fan1_computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cylinder.001");
+    Mesh* fan2_computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cylinder.002");
+    Mesh* fan3_computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cylinder.003");
+
     Mesh* keyboard = new Mesh(phong_texture_shader, "models\\keyboard.obj", computer_texture);
     Mesh* lit = new Mesh(phong_texture_shader, "models\\lit.obj", wood_texture);
     Mesh* monitor = new Mesh(phong_texture_shader, "models\\monitor.obj", computer_texture);
@@ -153,6 +158,22 @@ int main()
     Node* mesh_node_computer = new Node(mesh_computer);
     mesh_node_computer->add(computer);
     viewer.scene_root->add(mesh_node_computer);
+
+    Node* fan1_node = new Node(glm::mat4(1.0f));
+    fan1_node->add(fan1_computer);
+    mesh_node_computer->add(fan1_node);
+
+    Node* fan2_node = new Node(glm::mat4(1.0f));
+    fan2_node->add(fan2_computer);
+    mesh_node_computer->add(fan2_node);
+
+    Node* fan3_node = new Node(glm::mat4(1.0f));
+    fan3_node->add(fan3_computer);
+    mesh_node_computer->add(fan3_node);
+
+    viewer.fan_nodes.push_back(fan1_node);
+    viewer.fan_nodes.push_back(fan2_node);
+    viewer.fan_nodes.push_back(fan3_node);
 
     //integration keyboard
     glm::mat4 mesh_keyboard = glm::translate(glm::mat4(1.0f), glm::vec3(-0.55f, -0.425f, -1.52f))

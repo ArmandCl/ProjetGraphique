@@ -16,6 +16,14 @@ public:
     Viewer(int width = 1280, int height = 720);
     ~Viewer();
 
+    std::vector<Node*> fan_nodes;
+    // Les positions exactes des fans dans Blender (à noter manuellement !)
+    std::vector<glm::vec3> fan_centers = {
+        glm::vec3(0.0f, -1.11f, -2.9f), // fan3
+        glm::vec3(0.0f, 1.8f, -2.9f), // fan1
+        glm::vec3(0.0f, 0.34f, -2.9f) // fan2
+    };
+
     void run();
 
     Node* scene_root;

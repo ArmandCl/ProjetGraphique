@@ -6,7 +6,7 @@
 
 class Mesh : public Shape {
 public:
-    Mesh(Shader* shader, const char* objPath, Texture* texture = nullptr);
+    Mesh(Shader* shader, const char* objPath, Texture* texture = nullptr, const char* objectName = nullptr);
     ~Mesh();
     void draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) override;
     void setLight(glm::vec3 pos, glm::vec3 color) {

@@ -97,6 +97,21 @@ void Viewer::run() {
         float current_frame = glfwGetTime();
         delta_time = current_frame - last_frame;
         last_frame = current_frame;
+        float rotation_speed = 13.0f;
+        float angle = current_frame * rotation_speed;
+
+        for (size_t i = 0; i < fan_nodes.size(); i++) {
+            if (i >= fan_centers.size()) break;
+            
+            glm::vec3 center = fan_centers[i];
+
+            // LA FORMULE MAGIQUE DU PIVOT : T(C) * R * T(-C)
+            glm::mat4 transform = glm::translate(glm::mat4(1.0f), center) 
+                                * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0, 0, 1))
+                                * glm::translate(glm::mat4(1.0f), -center);
+            
+            fan_nodes[i]->set_transform(transform);
+        }
 
         // Logique de la caméra
         if (is_free_camera) {

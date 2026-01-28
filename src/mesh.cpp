@@ -1,14 +1,14 @@
 #include "Mesh.h"
 #include "objloader.hpp"
 
-Mesh::Mesh(Shader* shader, const char* objPath, Texture* texture)
+Mesh::Mesh(Shader* shader, const char* objPath, Texture* texture, const char* objectName)
     : Shape(shader), texture_(texture), has_texture_(texture != nullptr) {
 
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec2> uvs;
     std::vector<glm::vec3> normals;
 
-    if (loadOBJ(objPath, vertices, uvs, normals)) {
+    if (loadOBJ(objPath, vertices, uvs, normals, objectName)) {
         vertexCount = vertices.size();
 
         glGenVertexArrays(1, &VAO);
