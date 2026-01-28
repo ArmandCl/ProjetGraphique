@@ -9,10 +9,9 @@
 class Rectangle : public Shape
 {
 public:
-    // Rectangle avec Èpaisseur (3D)
     Rectangle(Shader* shader_program, float width = 2.0f, float height = 1.0f, float thickness = 0.1f);
     Rectangle(Shader* shader_program, Texture* texture, float width = 2.0f, float height = 1.0f, float thickness = 0.1f);
-
+    void setColor(glm::vec4 color) { object_color = color; }
     virtual ~Rectangle();
 
     void draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) override;
@@ -32,6 +31,7 @@ private:
     unsigned int vertex_count;
     glm::vec3 lightPos;
     glm::vec3 lightColor;
+    glm::vec4 object_color = glm::vec4(1.0f); // Blanc par d√©faut
 };
 
 #endif // RECTANGLE_H

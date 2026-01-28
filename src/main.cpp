@@ -16,6 +16,9 @@
 
 int main()
 {
+    glEnable(GL_BLEND);//pour la transparence de la vitre
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     Viewer viewer;
     std::string shader_dir = SHADER_DIR;
 
@@ -41,6 +44,7 @@ int main()
     float room_width = 5.0f * scale_factor;   // largeur: 1.75
     float room_height = 4.0f * scale_factor;  // hauteur: 1.4
     float room_depth = 5.0f * scale_factor;   // profondeur: 1.75 (plus carré!)
+    float wall_thickness = 0.15f;
 
     Shape* room = new Room(phong_texture_shader,
         floor_texture,
@@ -49,13 +53,38 @@ int main()
         room_width,
         room_height,
         room_depth,
-        0.15f);
+        wall_thickness);
 
     // La pièce est centrée à l'origine
     glm::mat4 room_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.875f)); // Centre ajusté
     Node* room_node = new Node(room_mat);
     room_node->add(room);
     viewer.scene_root->add(room_node);
+
+    // --- PARAMÈTRES DE LA VITRE (doivent correspondre au trou du Room.cpp) ---
+    float hd = room_depth * 0.5f;
+    float win_w = (room_width * 0.35f); 
+    float win_h = (room_height * 0.45f);
+    float x_offset_trou = room_width * 0.2f; // Le décalage X qu'on a mis dans Room.cpp
+
+    // Création de la vitre
+    Rectangle* glass = new Rectangle(phong_color_shader, win_w, win_h, 0.01f);
+    glass->setColor(glm::vec4(0.5f, 0.8f, 1.0f, 0.2f)); // Bleu clair transparent
+
+    // Positionnement : 
+    float z_local_vitre = -hd - (wall_thickness * 0.5f) - 0.001f;
+    float z_global_final = -0.875f + z_local_vitre; 
+
+    glm::mat4 glass_mat = glm::translate(glm::mat4(1.0f), 
+        glm::vec3(x_offset_trou, 0.0f, z_global_final));
+    /*glm::mat4 glass_mat = glm::translate(glm::mat4(1.0f), 
+        glm::vec3(x_offset_trou, 0.0f, z_fond-0.9f));*/
+
+    Node* glass_node = new Node(glass_mat);
+    glass_node->add(glass);
+
+    // IMPORTANT : Ajoute-le au room_node pour qu'il subisse le même déplacement global
+   // room_node->add(glass_node);
 
     // === SPHÈRE AVEC LUMIÈRE ===
 
@@ -268,7 +297,9 @@ int main()
     fan3_computer->setLight(lp, lc);
     door->setLight(lp, lc);
 
-    
+    //viewer.scene_root->add(room_node); // La pièce d'abord
+    viewer.scene_root->add(glass_node); // LA VITRE EN DERNIER
+
     // Maintenant on peut lancer le viewer
     viewer.run();
 

@@ -29,7 +29,7 @@ void Rectangle::initRectangle3D(float width, float height, float thickness)
          half_width, -half_height,  half_thickness,  1.0f, 0.0f,  0.0f,  0.0f,  1.0f,
          half_width,  half_height,  half_thickness,  1.0f, 1.0f,  0.0f,  0.0f,  1.0f,
         -half_width,  half_height,  half_thickness,  0.0f, 1.0f,  0.0f,  0.0f,  1.0f,
-        // Face arrière (Z-)
+        // Face arriï¿½re (Z-)
         -half_width, -half_height, -half_thickness,  1.0f, 0.0f,  0.0f,  0.0f, -1.0f,
         -half_width,  half_height, -half_thickness,  1.0f, 1.0f,  0.0f,  0.0f, -1.0f,
          half_width,  half_height, -half_thickness,  0.0f, 1.0f,  0.0f,  0.0f, -1.0f,
@@ -58,7 +58,7 @@ void Rectangle::initRectangle3D(float width, float height, float thickness)
 
     std::vector<unsigned int> indices = {
         0, 1, 2, 2, 3, 0,       // Avant
-        4, 5, 6, 6, 7, 4,       // Arrière
+        4, 5, 6, 6, 7, 4,       // Arriï¿½re
         8, 9, 10, 10, 11, 8,    // Gauche
         12, 13, 14, 14, 15, 12, // Droite
         16, 17, 18, 18, 19, 16, // Haut
@@ -101,27 +101,41 @@ Rectangle::~Rectangle()
 
 void Rectangle::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection)
 {
+    // 1. DETERMINER SI TRANSPARENT
+    bool isTransparent = (object_color.a < 1.0f);
+
+    // 2. ACTIVER LE SHADER D'ABORD
     glUseProgram(this->shader_program_);
 
-    // Envoi des matrices (indispensable si Shape::draw n'est pas appelé)
+    // 3. ENVOYER LES MATRICES (Position, Vue, Projection)
     glUniformMatrix4fv(glGetUniformLocation(this->shader_program_, "model"), 1, GL_FALSE, &model[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(this->shader_program_, "view"), 1, GL_FALSE, &view[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(this->shader_program_, "projection"), 1, GL_FALSE, &projection[0][0]);
 
-    // Envoi de la lumière
+    // 4. ENVOYER LA COULEUR ET LA LUMIERE
+    GLint colorLoc = glGetUniformLocation(this->shader_program_, "objectColor");
+    glUniform4f(colorLoc, object_color.r, object_color.g, object_color.b, object_color.a);
     glUniform3f(glGetUniformLocation(this->shader_program_, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
     glUniform3f(glGetUniformLocation(this->shader_program_, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
 
-    if (has_texture_ && texture_ != nullptr)
-    {
+    // 5. GERER LA TEXTURE (si c'est un poster)
+    if (has_texture_ && texture_ != nullptr) {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture_->getGLid());
-        glUniform1i(glGetUniformLocation(this->shader_program_, "diffuse_map"), 0); // Pour Phong
-        glUniform1i(glGetUniformLocation(this->shader_program_, "tex"), 0);         // Pour Texture simple
+        glUniform1i(glGetUniformLocation(this->shader_program_, "diffuse_map"), 0);
     }
 
+    // 6. DESACTIVER LE Z-BUFFER JUSTE POUR LE DESSIN SI TRANSPARENT
+    if(isTransparent) {
+        // On ne coupe pas le DepthMask, on s'assure juste que le Blend est lÃ 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+    // 7. DESSINER
     glBindVertexArray(VAO);
-    // On n'appelle PLUS Shape::draw(model, view, projection);
     glDrawElements(GL_TRIANGLES, vertex_count, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+
+    // 8. RÃ‰ACTIVER LE Z-BUFFER POUR LES AUTRES
+    if(isTransparent) glDepthMask(GL_TRUE);
 }
