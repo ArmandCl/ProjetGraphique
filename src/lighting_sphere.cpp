@@ -14,11 +14,12 @@ LightingSphere::LightingSphere(Shader *shader_program, glm::vec3 light_position,
 
 void LightingSphere::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection)
 {
-
-    Sphere::draw(model, view, projection);
+    glUseProgram(this->shader_program_); // <--- FORCE L'UTILISATION DU SHADER ICI
 
     // set uniform variables for light and color
     glUniform3fv(light_pos_loc, 1, glm::value_ptr(light_position));
     glUniform3fv(light_color_loc, 1, glm::value_ptr(light_color));
-    glUniform3fv(object_color_loc, 1, glm::value_ptr(object_color));
+    glUniform4f(object_color_loc, object_color.r, object_color.g, object_color.b, 1.0f);
+
+    Sphere::draw(model, view, projection); // Dessine après avoir envoyé les infos
 }
