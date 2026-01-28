@@ -130,10 +130,12 @@ int main()
     Mesh* fan2_computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cylinder.002");
     Mesh* fan3_computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cylinder.003");
 
+    Mesh* chair = new Mesh(phong_texture_shader, "models\\chair.obj", wood_texture);
     Mesh* keyboard = new Mesh(phong_texture_shader, "models\\keyboard.obj", computer_texture);
     Mesh* lit = new Mesh(phong_texture_shader, "models\\lit.obj", wood_texture);
     Mesh* monitor = new Mesh(phong_texture_shader, "models\\monitor.obj", computer_texture);
     Mesh* mouse = new Mesh(phong_texture_shader, "models\\mouse.obj", computer_texture);
+    Mesh* door = new Mesh(phong_texture_shader, "models\\door.obj", wood_texture);
 
     //integration lamp
     glm::mat4 mesh_lamp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.7f, -0.875f))
@@ -142,6 +144,14 @@ int main()
     Node* mesh_node_lamp = new Node(mesh_lamp);
     mesh_node_lamp->add(lamp);
     viewer.scene_root->add(mesh_node_lamp);
+    
+    //integration door
+    glm::mat4 mesh_door = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.7f, -0.875f))
+        * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+
+    Node* mesh_node_door = new Node(mesh_door);
+    mesh_node_door->add(door);
+    viewer.scene_root->add(mesh_node_door);
 
     //integration chevet
     glm::mat4 mesh_chevet = glm::translate(glm::mat4(1.0f), glm::vec3(0.65f, -0.7f, -0.675f))
@@ -175,6 +185,14 @@ int main()
     viewer.fan_nodes.push_back(fan1_node);
     viewer.fan_nodes.push_back(fan2_node);
     viewer.fan_nodes.push_back(fan3_node);
+
+    //integration chair
+    glm::mat4 mesh_chair = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f))
+        * glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f));
+
+    Node* mesh_node_chair = new Node(mesh_chair);
+    mesh_node_chair->add(chair);
+    viewer.scene_root->add(mesh_node_chair);
 
     //integration keyboard
     glm::mat4 mesh_keyboard = glm::translate(glm::mat4(1.0f), glm::vec3(-0.55f, -0.425f, -1.52f))
@@ -244,6 +262,11 @@ int main()
     keyboard->setLight(lp, lc);
     mouse->setLight(lp, lc);
     chevet->setLight(lp, lc);
+    chair->setLight(lp, lc);
+    fan1_computer->setLight(lp, lc);
+    fan2_computer->setLight(lp, lc);
+    fan3_computer->setLight(lp, lc);
+    door->setLight(lp, lc);
 
     
     // Maintenant on peut lancer le viewer
