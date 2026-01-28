@@ -34,7 +34,7 @@ int main()
     Texture* wood_texture = new Texture("textures\\wood.jpg");
     Texture* computer_texture = new Texture("textures\\black.jpg");
     //Texture* lit_texture = new Texture("textures\\white_sheet2.jpg");
-    Texture* framed_texture = new Texture("textures\\csgo_screen.png");
+    Texture* framed_texture = new Texture("textures\\framed.jpeg");
 
     // Texture métal pour les pieds
     Texture* metal_texture = new Texture("textures\\metal.jpg");
@@ -138,7 +138,7 @@ int main()
     }
 
     // === AFFICHE SUR LE MUR ===
-    Texture* poster_texture = new Texture("textures\\csgo_poster.png");
+    Texture* poster_texture = new Texture("textures\\poster.jpg");
 
     // Affiche plus petite proportionnellement
     Shape* poster = new Rectangle(phong_texture_shader, poster_texture, 0.8f * scale_factor, 1.0f * scale_factor, 0.02f * scale_factor);
