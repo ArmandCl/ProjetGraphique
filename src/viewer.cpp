@@ -5,10 +5,7 @@
 #include "glm/ext.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-<<<<<<< Updated upstream
-=======
 // Variables globales pour les callbacks
->>>>>>> Stashed changes
 bool keys[1024] = { false };
 
 Viewer::Viewer(int width, int height)
@@ -28,10 +25,7 @@ Viewer::Viewer(int width, int height)
     delta_time(0.0f),
     last_frame(0.0f)
 {
-<<<<<<< Updated upstream
-=======
-    // Initialisez le tableau keys
->>>>>>> Stashed changes
+    // Initializez le tableau keys
     for (int i = 0; i < 1024; i++) {
         keys[i] = false;
     }
@@ -41,17 +35,14 @@ Viewer::Viewer(int width, int height)
         glfwTerminate();
     }
 
+    // Version hints
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
-<<<<<<< Updated upstream
-    win = glfwCreateWindow(width, height, "Viewer", NULL, NULL);
-=======
     win = glfwCreateWindow(width, height, "Viewer - Camera Libre", NULL, NULL);
->>>>>>> Stashed changes
 
     if (win == NULL) {
         std::cerr << "Failed to create window" << std::endl;
@@ -67,10 +58,7 @@ Viewer::Viewer(int width, int height)
 
     glfwSetWindowUserPointer(win, this);
 
-<<<<<<< Updated upstream
-=======
     // Callbacks
->>>>>>> Stashed changes
     glfwSetKeyCallback(win, key_callback_static);
     glfwSetCursorPosCallback(win, mouse_callback_static);
     glfwSetScrollCallback(win, scroll_callback_static);
@@ -78,18 +66,16 @@ Viewer::Viewer(int width, int height)
 
     glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-<<<<<<< Updated upstream
-=======
     // Info OpenGL
     std::cout << glGetString(GL_VERSION) << ", GLSL "
         << glGetString(GL_SHADING_LANGUAGE_VERSION) << ", Renderer "
         << glGetString(GL_RENDERER) << std::endl;
 
->>>>>>> Stashed changes
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
+    // --- INITIALISATION OMBRES ---
     depthShader = new Shader("shaders/shadow_depth.vert", "shaders/shadow_depth.frag");
 
     glGenFramebuffers(1, &depthMapFBO);
@@ -137,10 +123,7 @@ void Viewer::run() {
             fan_nodes[i]->set_transform(transform);
         }
 
-<<<<<<< Updated upstream
-=======
         // Caméra
->>>>>>> Stashed changes
         if (is_free_camera) {
             process_movement();
         } else {
@@ -148,63 +131,58 @@ void Viewer::run() {
             camera_position.x = sin(time) * orbit_radius;
             camera_position.z = cos(time) * orbit_radius - 0.875f;
             camera_position.y = orbit_height;
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
             glm::vec3 target = glm::vec3(0.0f, 0.0f, -0.875f);
             camera_front = glm::normalize(target - camera_position);
             camera_right = glm::normalize(glm::cross(camera_front, world_up));
             camera_up = glm::normalize(glm::cross(camera_right, camera_front));
         }
 
-<<<<<<< Updated upstream
-=======
         // Rendu
->>>>>>> Stashed changes
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = glm::lookAt(camera_position, camera_position + camera_front, camera_up);
         glm::mat4 projection = glm::perspective(glm::radians(zoom), (float)window_width / (float)window_height, 0.1f, 100.0f);
 
-<<<<<<< Updated upstream
-        glm::vec3 lightPos(0.0f, 0.7f, -0.875f);
-        float near_plane = 0.1f, far_plane = 10.0f;
-        glm::mat4 lightProjection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, near_plane, far_plane);
-        glm::mat4 lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-=======
-        // Configuration Lumière (Matrice élargie)
-        glm::vec3 lightPos(0.0f, 0.6f, -0.875f);
+        // --- Configuration Lumière (Mode Spot/Ampoule) ---
+        // 1. Position : Sous l'abat-jour
+        glm::vec3 lightPos(0.0f, 0.6f, -0.875f); 
+        // 2. Cible : Le sol
         glm::vec3 lightTarget(0.0f, -1.0f, -0.875f);
+
+        // 3. Projection : PERSPECTIVE (Cône de lumière)
         float aspect = (float)SHADOW_WIDTH / (float)SHADOW_HEIGHT;
         float near_plane = 0.1f; 
         float far_plane = 10.0f;
         glm::mat4 lightProjection = glm::perspective(glm::radians(120.0f), aspect, near_plane, far_plane);
 
         // 4. Vue
-        glm::mat4 lightView = glm::lookAt(lightPos, lightTarget, glm::vec3(0.0f, 0.0f, 1.0f)); // Up = Z pour éviter les problèmes quand on regarde Y-
->>>>>>> Stashed changes
+        glm::mat4 lightView = glm::lookAt(lightPos, lightTarget, glm::vec3(0.0f, 0.0f, 1.0f)); 
         glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 
+
+        // --- PASSE 1 : RENDU DE L'OMBRE ---
         glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
         glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
 
         // Face Culling pour corriger le "Peter Panning"
-        //glEnable(GL_CULL_FACE);
-        //glCullFace(GL_FRONT); 
+        // (Optionnel : si ça bugue chez toi, commente ces 2 lignes)
+        // glEnable(GL_CULL_FACE);
+        // glCullFace(GL_FRONT); 
 
         depthShader->use();
         depthShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
         scene_root->drawShadow(depthShader, glm::mat4(1.0f)); 
 
         // Reset Face Culling
-        //glCullFace(GL_BACK);
-        //glDisable(GL_CULL_FACE);
+        // (Et ces 2 lignes aussi si tu as commenté au-dessus)
+        // glCullFace(GL_BACK);
+        // glDisable(GL_CULL_FACE);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+        // --- PASSE 2 : RENDU NORMAL ---
         glViewport(0, 0, window_width, window_height);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -215,8 +193,6 @@ void Viewer::run() {
     }
 }
 
-<<<<<<< Updated upstream
-=======
 // Callbacks (inchangés)
 void Viewer::key_callback_static(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Viewer* viewer = static_cast<Viewer*>(glfwGetWindowUserPointer(window));
@@ -235,40 +211,18 @@ void Viewer::framebuffer_size_callback_static(GLFWwindow* window, int width, int
     viewer->on_framebuffer_size(width, height);
 }
 
->>>>>>> Stashed changes
 void Viewer::on_key(int key, int action) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(win, GLFW_TRUE);
-<<<<<<< Updated upstream
-    }
-
-=======
->>>>>>> Stashed changes
     if (key == GLFW_KEY_C && action == GLFW_PRESS) {
         is_free_camera = !is_free_camera;
         if (is_free_camera) {
-<<<<<<< Updated upstream
-            pitch = glm::degrees(asin(camera_front.y));
-            yaw = glm::degrees(atan2(camera_front.z, camera_front.x));
-=======
->>>>>>> Stashed changes
             glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             first_mouse = true; 
         } else {
             glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
     }
-<<<<<<< Updated upstream
-
-    if (key == GLFW_KEY_M && action == GLFW_PRESS) {
-        if (glfwGetInputMode(win, GLFW_CURSOR) == GLFW_CURSOR_DISABLED)
-            glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        else
-            glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    }
-
-=======
->>>>>>> Stashed changes
     if (key >= 0 && key < 1024) {
         if (action == GLFW_PRESS) keys[key] = true;
         else if (action == GLFW_RELEASE) keys[key] = false;
@@ -301,25 +255,6 @@ void Viewer::on_framebuffer_size(int width, int height) {
 
 void Viewer::process_movement() {
     float velocity = camera_speed * delta_time;
-<<<<<<< Updated upstream
-
-    if (keys[GLFW_KEY_W] || keys[GLFW_KEY_UP])
-        camera_position += camera_front * velocity;
-    if (keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN])
-        camera_position -= camera_front * velocity;
-    if (keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT])
-        camera_position -= camera_right * velocity;
-    if (keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT])
-        camera_position += camera_right * velocity;
-    if (keys[GLFW_KEY_SPACE])
-        camera_position += world_up * velocity;
-    if (keys[GLFW_KEY_LEFT_CONTROL] || keys[GLFW_KEY_RIGHT_CONTROL])
-        camera_position -= world_up * velocity;
-
-    if (keys[GLFW_KEY_LEFT_SHIFT] || keys[GLFW_KEY_RIGHT_SHIFT]) {
-        velocity *= 2.0f;
-    }
-=======
     if (keys[GLFW_KEY_W]) camera_position += camera_front * velocity;
     if (keys[GLFW_KEY_S]) camera_position -= camera_front * velocity;
     if (keys[GLFW_KEY_A]) camera_position -= camera_right * velocity;
@@ -327,7 +262,6 @@ void Viewer::process_movement() {
     if (keys[GLFW_KEY_SPACE]) camera_position += world_up * velocity;
     if (keys[GLFW_KEY_LEFT_CONTROL]) camera_position -= world_up * velocity;
     if (keys[GLFW_KEY_LEFT_SHIFT]) velocity *= 2.0f;
->>>>>>> Stashed changes
 }
 
 void Viewer::update_camera_vectors() {
@@ -338,20 +272,4 @@ void Viewer::update_camera_vectors() {
     camera_front = glm::normalize(front);
     camera_right = glm::normalize(glm::cross(camera_front, world_up));
     camera_up = glm::normalize(glm::cross(camera_right, camera_front));
-}
-
-void Viewer::key_callback_static(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    static_cast<Viewer*>(glfwGetWindowUserPointer(window))->on_key(key, action);
-}
-
-void Viewer::mouse_callback_static(GLFWwindow* window, double xpos, double ypos) {
-    static_cast<Viewer*>(glfwGetWindowUserPointer(window))->on_mouse(xpos, ypos);
-}
-
-void Viewer::scroll_callback_static(GLFWwindow* window, double xoffset, double yoffset) {
-    static_cast<Viewer*>(glfwGetWindowUserPointer(window))->on_scroll(xoffset, yoffset);
-}
-
-void Viewer::framebuffer_size_callback_static(GLFWwindow* window, int width, int height) {
-    static_cast<Viewer*>(glfwGetWindowUserPointer(window))->on_framebuffer_size(width, height);
 }

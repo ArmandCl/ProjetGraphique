@@ -40,19 +40,15 @@ void Room::initRoom(float width, float height, float depth, float thickness) {
     float hw = width * 0.5f;
     float hh = height * 0.5f;
     float hd = depth * 0.5f;
-<<<<<<< Updated upstream
+
+    // Le petit décalage pour éviter le glitch de texture (Z-fighting)
     float eps = 0.001f; 
+
+    // On définit le bas du mur
     float y_limit_bot = -hh - thickness;
 
     auto createPart = [&](const std::vector<float>& v, Texture* tex) {
         Wall wall; 
-=======
-    float eps = 0.001f;
-    float y_limit_bot = -hh - thickness;
-
-    auto createPart = [&](const std::vector<float>& v, Texture* tex) {
-        Wall wall;
->>>>>>> Stashed changes
         wall.texture = tex;
         wall.vertex_count = 6;
         std::vector<unsigned int> indices = { 0, 1, 2, 2, 3, 0 };
@@ -68,31 +64,25 @@ void Room::initRoom(float width, float height, float depth, float thickness) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, wall.EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
-        // Position (0)
+        // Position (Location 0)
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-        
-        // Texture (1)
+        // Texture (Location 1)
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-        
-        // Normale (2)
+        // Normale (Location 2)
         glEnableVertexAttribArray(2);
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 
         walls.push_back(wall);
     };
 
-<<<<<<< Updated upstream
-=======
     // --- COORDONNÉES DE TEXTURE (TILING) ---
-    // On utilise les dimensions pour répéter la texture (1 mètre = 1 répétition)
     float uW = width * 0.5f; 
     float vD = depth * 0.5f; 
     float vH = height * 0.5f; 
 
     // --- 1. SOL ---
->>>>>>> Stashed changes
     float y_floor_top = -hh;
     float y_floor_bot = -hh - thickness;
     
@@ -104,16 +94,13 @@ void Room::initRoom(float width, float height, float depth, float thickness) {
         -hw, y_floor_top, -hd,  0.0f, vD,    0,1,0 
     }, floor_texture_);
     
-    // Sol dessous/bords (optionnel, sans tiling complexe)
+    // Sol dessous/bords (optionnel)
     createPart({ -hw, y_floor_bot, -hd, 0,0, 0,-1,0,  hw, y_floor_bot, -hd, 1,0, 0,-1,0,  hw, y_floor_bot, hd, 1,1, 0,-1,0,  -hw, y_floor_bot, hd, 0,1, 0,-1,0 }, floor_texture_);
     createPart({ -hw, y_floor_bot, hd, 0,0, 0,0,1,  hw, y_floor_bot, hd, 1,0, 0,0,1,  hw, y_floor_top, hd, 1,1, 0,0,1,  -hw, y_floor_top, hd, 0,1, 0,0,1 }, floor_texture_); 
     createPart({ -hw, y_floor_bot, -hd, 0,0, 0,0,-1, -hw, y_floor_top, -hd, 0,1, 0,0,-1, hw, y_floor_top, -hd, 1,1, 0,0,-1,  hw, y_floor_bot, -hd, 1,0, 0,0,-1 }, floor_texture_); 
     createPart({ -hw, y_floor_bot, -hd, 0,0, -1,0,0, -hw, y_floor_bot, hd, 1,0, -1,0,0,  -hw, y_floor_top, hd, 1,1, -1,0,0,  -hw, y_floor_top, -hd, 0,1, -1,0,0 }, floor_texture_);
 
-<<<<<<< Updated upstream
-=======
     // --- 2. MUR GAUCHE ---
->>>>>>> Stashed changes
     float x_in = -hw - eps;
     float x_out = -hw - thickness - eps;
 
@@ -131,51 +118,27 @@ void Room::initRoom(float width, float height, float depth, float thickness) {
     createPart({ x_out, y_limit_bot, -hd, 0,0, 0,-1,0, x_in, y_limit_bot, -hd, 1,0, 0,-1,0,  x_in, y_limit_bot, hd, 1,1, 0,-1,0,  x_out, y_limit_bot, hd, 0,1, 0,-1,0 }, wall_texture_); 
     createPart({ x_out, y_limit_bot, -hd, 0,0, 0,0,-1, x_out, hh, -hd, 0,1, 0,0,-1,  x_in, hh, -hd, 1,1, 0,0,-1,  x_in, y_limit_bot, -hd, 1,0, 0,0,-1 }, wall_texture_);
 
+    // --- 3. MUR ARRIÈRE ---
     float z_in = -hd - eps;
     float z_out = -hd - thickness - eps;
     float win_w = width * 0.35f; float win_h = height * 0.45f;
     float x_off = width * 0.2f;
     float xL = x_off - (win_w * 0.5f); float xR = x_off + (win_w * 0.5f);
     float yB = -(win_h * 0.5f); float yT = (win_h * 0.5f);
-<<<<<<< Updated upstream
-    float x_bord_gauche = -hw - thickness; 
 
-    createPart({ x_bord_gauche, y_limit_bot, z_in, 0,0, hw, y_limit_bot, z_in, 1,0, hw, yB, z_in, 1,1, x_bord_gauche, yB, z_in, 0,1 }, wall_texture_);
-    createPart({ x_bord_gauche, yT, z_in, 0,0,  hw, yT, z_in, 1,0,  hw, hh, z_in, 1,1, x_bord_gauche, hh, z_in, 0,1 }, wall_texture_);
-    createPart({ x_bord_gauche, yB, z_in, 0,0,  xL, yB, z_in, 1,0,  xL, yT, z_in, 1,1, x_bord_gauche, yT, z_in, 0,1 }, wall_texture_);
-    createPart({ xR, yB, z_in, 0,0,   hw, yB, z_in, 1,0,  hw, yT, z_in, 1,1, xR, yT, z_in, 0,1 }, wall_texture_);
-
-    createPart({ hw, y_limit_bot, z_out, 0,0, x_bord_gauche, y_limit_bot, z_out, 1,0, x_bord_gauche, yB, z_out, 1,1, hw, yB, z_out, 0,1 }, wall_texture_);
-    createPart({ hw, yT, z_out, 0,0,  x_bord_gauche, yT, z_out, 1,0,  x_bord_gauche, hh, z_out, 1,1, hw, hh, z_out, 0,1 }, wall_texture_);
-    createPart({ xL, yB, z_out, 0,0,  x_bord_gauche, yB, z_out, 1,0,  x_bord_gauche, yT, z_out, 1,1, xL, yT, z_out, 0,1 }, wall_texture_);
-    createPart({ hw, yB, z_out, 0,0,   xR, yB, z_out, 1,0,   xR, yT, z_out, 1,1, hw, yT, z_out, 0,1 }, wall_texture_);
-
-    createPart({ xL, yB, z_in, 0,0, xR, yB, z_in, 1,0, xR, yB, z_out, 1,1, xL, yB, z_out, 0,1 }, wall_texture_);
-    createPart({ xL, yT, z_out, 0,0, xR, yT, z_out, 1,0, xR, yT, z_in, 1,1, xL, yT, z_in, 0,1 }, wall_texture_);
-    createPart({ xL, yB, z_out, 0,0, xL, yT, z_out, 1,0, xL, yT, z_in, 1,1, xL, yB, z_in, 0,1 }, wall_texture_);
-    createPart({ xR, yB, z_in, 0,0, xR, yT, z_in, 1,0, xR, yT, z_out, 1,1, xR, yB, z_out, 0,1 }, wall_texture_);
-
-    createPart({ x_bord_gauche, hh, z_in, 0,0,  hw, hh, z_in, 1,0,  hw, hh, z_out, 1,1,  x_bord_gauche, hh, z_out, 0,1 }, wall_texture_); 
-    createPart({ x_bord_gauche, y_limit_bot, z_out, 0,0, hw, y_limit_bot, z_out, 1,0, hw, y_limit_bot, z_in, 1,1,  x_bord_gauche, y_limit_bot, z_in, 0,1 }, wall_texture_); 
-    createPart({ x_bord_gauche, y_limit_bot, z_in, 0,0, x_bord_gauche, y_limit_bot, z_out, 1,0, x_bord_gauche, hh, z_out, 1,1, x_bord_gauche, hh, z_in, 0,1 }, wall_texture_); 
-    createPart({ hw, y_limit_bot, z_out, 0,0, hw, y_limit_bot, z_in, 1,0, hw, hh, z_in, 1,1, hw, hh, z_out, 0,1 }, wall_texture_); 
-}
-
-=======
-
-    // Faces avant (Intérieur) avec Tiling
+    // Faces avant (Intérieur)
     createPart({ -hw, y_limit_bot, z_in, 0,0, 0,0,1, hw, y_limit_bot, z_in, uW,0, 0,0,1, hw, yB, z_in, uW,0.3f, 0,0,1, -hw, yB, z_in, 0,0.3f, 0,0,1 }, wall_texture_);
     createPart({ -hw, yT, z_in, 0,0.7f, 0,0,1,  hw, yT, z_in, uW,0.7f, 0,0,1,  hw, hh, z_in, uW,vH, 0,0,1, -hw, hh, z_in, 0,vH, 0,0,1 }, wall_texture_);
     createPart({ -hw, yB, z_in, 0,0.3f, 0,0,1,  xL, yB, z_in, 0.3f,0.3f, 0,0,1,  xL, yT, z_in, 0.3f,0.7f, 0,0,1, -hw, yT, z_in, 0,0.7f, 0,0,1 }, wall_texture_);
     createPart({ xR, yB, z_in, 0.7f,0.3f, 0,0,1,   hw, yB, z_in, uW,0.3f, 0,0,1,  hw, yT, z_in, uW,0.7f, 0,0,1, xR, yT, z_in, 0.7f,0.7f, 0,0,1 }, wall_texture_);
 
-    // Faces arrières
+    // Faces arrières (Extérieur)
     createPart({ hw, y_limit_bot, z_out, 0,0, 0,0,-1, -hw, y_limit_bot, z_out, 1,0, 0,0,-1, -hw, yB, z_out, 1,1, 0,0,-1, hw, yB, z_out, 0,1, 0,0,-1 }, wall_texture_);
     createPart({ hw, yT, z_out, 0,0, 0,0,-1,  -hw, yT, z_out, 1,0, 0,0,-1,  -hw, hh, z_out, 1,1, 0,0,-1, hw, hh, z_out, 0,1, 0,0,-1 }, wall_texture_);
     createPart({ xL, yB, z_out, 0,0, 0,0,-1,  -hw, yB, z_out, 1,0, 0,0,-1,  -hw, yT, z_out, 1,1, 0,0,-1, xL, yT, z_out, 0,1, 0,0,-1 }, wall_texture_);
     createPart({ hw, yB, z_out, 0,0, 0,0,-1,   xR, yB, z_out, 1,0, 0,0,-1,   xR, yT, z_out, 1,1, 0,0,-1, hw, yT, z_out, 0,1, 0,0,-1 }, wall_texture_);
 
-    // Fenêtre
+    // Tunnel fenêtre
     createPart({ xL, yB, z_in, 0,0, 0,1,0, xR, yB, z_in, 1,0, 0,1,0, xR, yB, z_out, 1,1, 0,1,0, xL, yB, z_out, 0,1, 0,1,0 }, wall_texture_);
     createPart({ xL, yT, z_out, 0,0, 0,-1,0, xR, yT, z_out, 1,0, 0,-1,0, xR, yT, z_in, 1,1, 0,-1,0, xL, yT, z_in, 0,1, 0,-1,0 }, wall_texture_);
     createPart({ xL, yB, z_out, 0,0, 1,0,0, xL, yT, z_out, 1,0, 1,0,0, xL, yT, z_in, 1,1, 1,0,0, xL, yB, z_in, 0,1, 1,0,0 }, wall_texture_);
@@ -199,7 +162,6 @@ void Room::drawShadow(Shader* shader, glm::mat4 model) {
 }
 
 // === RENDU FINAL (PASSE 2) ===
->>>>>>> Stashed changes
 void Room::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap) {
     glUseProgram(this->shader_program_);
     
@@ -212,13 +174,8 @@ void Room::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::m
             glBindTexture(GL_TEXTURE_2D, wall.texture->getGLid());
             glUniform1i(glGetUniformLocation(this->shader_program_, "diffuse_map"), 0);
         }
-<<<<<<< Updated upstream
-        glBindVertexArray(wall.VAO);
-        
-=======
 
         // Appel parent avec 5 arguments
->>>>>>> Stashed changes
         Shape::draw(model, view, projection, lightSpaceMatrix, shadowMap);
 
         glBindVertexArray(wall.VAO);
