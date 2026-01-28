@@ -410,3 +410,11 @@ CTestTestfile.cmake
 *.swo
 
 run.ps1
+Debug/
+Release/
+x64/
+x86/
+build/
+out/
+bin/
+obj/
