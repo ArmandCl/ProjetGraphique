@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\eliot\source\repos\roomproject\build\CMakeFiles\d774f61f45cefce446759e270b2643dc\update_mappings.rule">
+    <CustomBuild Include="C:\Users\eliot\source\repos\ProjetGraphique\build\CMakeFiles\bfdb645204f8f9dde14e99958117ae9a\update_mappings.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\eliot\source\repos\roomproject\external\glfw\src\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\src\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Users\eliot\source\repos\roomproject\external\glfw\src\mappings.h.in">
+    <None Include="C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\src\mappings.h.in">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="C:\Users\eliot\source\repos\roomproject\external\glfw\CMake\GenerateMappings.cmake" />
-    <None Include="C:\Users\eliot\source\repos\roomproject\build\external\glfw\src\CMakeFiles\update_mappings" />
+    <None Include="C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\CMake\GenerateMappings.cmake" />
+    <None Include="C:\Users\eliot\source\repos\ProjetGraphique\build\external\glfw\src\CMakeFiles\update_mappings" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{69DD8957-2D54-3B4D-9825-486F03A10135}</UniqueIdentifier>
+      <UniqueIdentifier>{51B3727B-D837-336A-896B-6A90B7896A7F}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{9B7FC63A-4D67-3431-952C-B003230E56D2}</UniqueIdentifier>
+      <UniqueIdentifier>{464831E6-433B-3942-B02A-2705FDA980AF}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

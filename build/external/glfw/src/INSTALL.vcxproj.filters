@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\eliot\source\repos\roomproject\build\CMakeFiles\d774f61f45cefce446759e270b2643dc\INSTALL_force.rule">
+    <CustomBuild Include="C:\Users\eliot\source\repos\ProjetGraphique\build\CMakeFiles\bfdb645204f8f9dde14e99958117ae9a\INSTALL_force.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{69DD8957-2D54-3B4D-9825-486F03A10135}</UniqueIdentifier>
+      <UniqueIdentifier>{51B3727B-D837-336A-896B-6A90B7896A7F}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

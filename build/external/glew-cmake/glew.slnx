@@ -7,19 +7,19 @@
 		<BuildType Name="RelWithDebInfo"/>
 		<Platform Name="x64"/>
 	</Configurations>
-	<Project Path="libglew_shared.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7342efc4-7eaf-3532-abcb-62fc82965868">
+	<Project Path="libglew_shared.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="ae2169a5-9f66-3493-babb-f001e12d37cb">
 		<BuildDependency Project="../../ZERO_CHECK.vcxproj"/>
 	</Project>
-	<Project Path="libglew_static.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="c073a652-0a91-31b6-a900-16bb1f05bb06">
+	<Project Path="libglew_static.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="93f621da-c0aa-3f18-b1a7-8ddc0223f9da">
 		<BuildDependency Project="../../ZERO_CHECK.vcxproj"/>
 	</Project>
 	<Folder Name="/CMakePredefinedTargets/">
-		<Project Path="ALL_BUILD.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="167f3604-2e9c-334d-9a29-2afe78b9b697" DefaultStartup="true">
+		<Project Path="ALL_BUILD.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="484597c5-39d0-3be4-80a7-2659af2bd5cc" DefaultStartup="true">
 			<BuildDependency Project="../../ZERO_CHECK.vcxproj"/>
 			<BuildDependency Project="libglew_shared.vcxproj"/>
 			<BuildDependency Project="libglew_static.vcxproj"/>
 		</Project>
-		<Project Path="INSTALL.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="b2b57fda-8a27-34bf-81f7-8a728311615c">
+		<Project Path="INSTALL.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="45c31088-c9a4-3949-bd35-baa9c89e40af">
 			<BuildDependency Project="ALL_BUILD.vcxproj"/>
 			<BuildDependency Project="../../ZERO_CHECK.vcxproj"/>
 			<Build Solution="Debug|*" Project="false"/>
@@ -27,6 +27,6 @@
 			<Build Solution="MinSizeRel|*" Project="false"/>
 			<Build Solution="RelWithDebInfo|*" Project="false"/>
 		</Project>
-		<Project Path="../../ZERO_CHECK.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="5c75a489-415d-3f1c-8355-256f8f148e69"/>
+		<Project Path="../../ZERO_CHECK.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="874fbb13-acbd-38fb-a69b-fd555b7a2ded"/>
 	</Folder>
 </Solution>

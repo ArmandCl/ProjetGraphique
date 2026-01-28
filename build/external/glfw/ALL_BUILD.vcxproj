@@ -25,7 +25,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{167F3604-2E9C-334D-9A29-2AFE78B9B697}</ProjectGuid>
+    <ProjectGuid>{484597C5-39D0-3BE4-80A7-2659AF2BD5CC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
     <Platform>x64</Platform>
@@ -69,7 +69,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\eliot\source\repos\roomproject\include;C:\Users\eliot\source\repos\roomproject\external\glew-cmake\include;C:\Users\eliot\source\repos\roomproject\external\glfw\include;C:\Users\eliot\source\repos\roomproject\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\eliot\source\repos\ProjetGraphique\include;C:\Users\eliot\source\repos\ProjetGraphique\external\glew-cmake\include;C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\include;C:\Users\eliot\source\repos\ProjetGraphique\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -79,7 +79,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\eliot\source\repos\roomproject\include;C:\Users\eliot\source\repos\roomproject\external\glew-cmake\include;C:\Users\eliot\source\repos\roomproject\external\glfw\include;C:\Users\eliot\source\repos\roomproject\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\eliot\source\repos\ProjetGraphique\include;C:\Users\eliot\source\repos\ProjetGraphique\external\glew-cmake\include;C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\include;C:\Users\eliot\source\repos\ProjetGraphique\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -89,7 +89,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\eliot\source\repos\roomproject\include;C:\Users\eliot\source\repos\roomproject\external\glew-cmake\include;C:\Users\eliot\source\repos\roomproject\external\glfw\include;C:\Users\eliot\source\repos\roomproject\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\eliot\source\repos\ProjetGraphique\include;C:\Users\eliot\source\repos\ProjetGraphique\external\glew-cmake\include;C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\include;C:\Users\eliot\source\repos\ProjetGraphique\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -99,7 +99,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\eliot\source\repos\roomproject\include;C:\Users\eliot\source\repos\roomproject\external\glew-cmake\include;C:\Users\eliot\source\repos\roomproject\external\glfw\include;C:\Users\eliot\source\repos\roomproject\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\eliot\source\repos\ProjetGraphique\include;C:\Users\eliot\source\repos\ProjetGraphique\external\glew-cmake\include;C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\include;C:\Users\eliot\source\repos\ProjetGraphique\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -108,11 +108,11 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\eliot\source\repos\roomproject\external\glfw\CMakeLists.txt">
+    <CustomBuild Include="C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/eliot/source/repos/roomproject/external/glfw/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/eliot/source/repos/ProjetGraphique/external/glfw/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/eliot/source/repos/roomproject -BC:/Users/eliot/source/repos/roomproject/build --check-stamp-file C:/Users/eliot/source/repos/roomproject/build/external/glfw/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/eliot/source/repos/ProjetGraphique -BC:/Users/eliot/source/repos/ProjetGraphique/build --check-stamp-file C:/Users/eliot/source/repos/ProjetGraphique/build/external/glfw/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -120,12 +120,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\WriteBasicConfigVersionFile.cmake;C:\Users\eliot\source\repos\roomproject\external\glfw\CMake\cmake_uninstall.cmake.in;C:\Users\eliot\source\repos\roomproject\external\glfw\CMake\glfw3Config.cmake.in;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\eliot\source\repos\roomproject\build\external\glfw\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\WriteBasicConfigVersionFile.cmake;C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\CMake\cmake_uninstall.cmake.in;C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\CMake\glfw3Config.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\eliot\source\repos\ProjetGraphique\build\external\glfw\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/eliot/source/repos/roomproject/external/glfw/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/eliot/source/repos/ProjetGraphique/external/glfw/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/eliot/source/repos/roomproject -BC:/Users/eliot/source/repos/roomproject/build --check-stamp-file C:/Users/eliot/source/repos/roomproject/build/external/glfw/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/eliot/source/repos/ProjetGraphique -BC:/Users/eliot/source/repos/ProjetGraphique/build --check-stamp-file C:/Users/eliot/source/repos/ProjetGraphique/build/external/glfw/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -133,12 +133,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\WriteBasicConfigVersionFile.cmake;C:\Users\eliot\source\repos\roomproject\external\glfw\CMake\cmake_uninstall.cmake.in;C:\Users\eliot\source\repos\roomproject\external\glfw\CMake\glfw3Config.cmake.in;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\eliot\source\repos\roomproject\build\external\glfw\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\WriteBasicConfigVersionFile.cmake;C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\CMake\cmake_uninstall.cmake.in;C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\CMake\glfw3Config.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\eliot\source\repos\ProjetGraphique\build\external\glfw\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/eliot/source/repos/roomproject/external/glfw/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/eliot/source/repos/ProjetGraphique/external/glfw/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/eliot/source/repos/roomproject -BC:/Users/eliot/source/repos/roomproject/build --check-stamp-file C:/Users/eliot/source/repos/roomproject/build/external/glfw/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/eliot/source/repos/ProjetGraphique -BC:/Users/eliot/source/repos/ProjetGraphique/build --check-stamp-file C:/Users/eliot/source/repos/ProjetGraphique/build/external/glfw/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -146,12 +146,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\WriteBasicConfigVersionFile.cmake;C:\Users\eliot\source\repos\roomproject\external\glfw\CMake\cmake_uninstall.cmake.in;C:\Users\eliot\source\repos\roomproject\external\glfw\CMake\glfw3Config.cmake.in;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\eliot\source\repos\roomproject\build\external\glfw\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\WriteBasicConfigVersionFile.cmake;C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\CMake\cmake_uninstall.cmake.in;C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\CMake\glfw3Config.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\eliot\source\repos\ProjetGraphique\build\external\glfw\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/eliot/source/repos/roomproject/external/glfw/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/eliot/source/repos/ProjetGraphique/external/glfw/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/eliot/source/repos/roomproject -BC:/Users/eliot/source/repos/roomproject/build --check-stamp-file C:/Users/eliot/source/repos/roomproject/build/external/glfw/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/eliot/source/repos/ProjetGraphique -BC:/Users/eliot/source/repos/ProjetGraphique/build --check-stamp-file C:/Users/eliot/source/repos/ProjetGraphique/build/external/glfw/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -159,8 +159,8 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\WriteBasicConfigVersionFile.cmake;C:\Users\eliot\source\repos\roomproject\external\glfw\CMake\cmake_uninstall.cmake.in;C:\Users\eliot\source\repos\roomproject\external\glfw\CMake\glfw3Config.cmake.in;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\eliot\source\repos\roomproject\build\external\glfw\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\WriteBasicConfigVersionFile.cmake;C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\CMake\cmake_uninstall.cmake.in;C:\Users\eliot\source\repos\ProjetGraphique\external\glfw\CMake\glfw3Config.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\eliot\source\repos\ProjetGraphique\build\external\glfw\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
@@ -168,14 +168,14 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="C:\Users\eliot\source\repos\roomproject\build\ZERO_CHECK.vcxproj">
-      <Project>{5C75A489-415D-3F1C-8355-256F8F148E69}</Project>
+    <ProjectReference Include="C:\Users\eliot\source\repos\ProjetGraphique\build\ZERO_CHECK.vcxproj">
+      <Project>{874FBB13-ACBD-38FB-A69B-FD555B7A2DED}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\eliot\source\repos\roomproject\build\external\glfw\src\glfw.vcxproj">
-      <Project>{6B10A47E-BC2B-386F-8D6C-498BF4AA0371}</Project>
+    <ProjectReference Include="C:\Users\eliot\source\repos\ProjetGraphique\build\external\glfw\src\glfw.vcxproj">
+      <Project>{E4CB9A02-022F-3FB4-B165-D0DED73477EB}</Project>
       <Name>glfw</Name>
     </ProjectReference>
   </ItemGroup>

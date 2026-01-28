@@ -1,75 +1,75 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\main.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\node.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\shape.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\shader.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\viewer.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\viewer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\triangle.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\pyramid.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\pyramid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\cylinder.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\cylinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\sphere.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\texture.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\textured_sphere.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\textured_sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\lighting_sphere.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\lighting_sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\rectangle.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\rectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\room.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\room.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\objloader.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\objloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\eliot\source\repos\roomproject\src\mesh.cpp">
+    <ClCompile Include="C:\Users\eliot\source\repos\ProjetGraphique\src\mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Users\eliot\source\repos\roomproject\include\rectangle.h">
+    <ClInclude Include="C:\Users\eliot\source\repos\ProjetGraphique\include\rectangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\eliot\source\repos\roomproject\include\room.h">
+    <ClInclude Include="C:\Users\eliot\source\repos\ProjetGraphique\include\room.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\eliot\source\repos\roomproject\include\mesh.h">
+    <ClInclude Include="C:\Users\eliot\source\repos\ProjetGraphique\include\mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\eliot\source\repos\roomproject\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\eliot\source\repos\ProjetGraphique\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{9B7FC63A-4D67-3431-952C-B003230E56D2}</UniqueIdentifier>
+      <UniqueIdentifier>{464831E6-433B-3942-B02A-2705FDA980AF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{4E4D066C-7526-3E43-A093-D0432E90BD69}</UniqueIdentifier>
+      <UniqueIdentifier>{DF6D469D-3BA0-3499-99CF-A2C300A0087E}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
