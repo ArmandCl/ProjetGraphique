@@ -137,3 +137,10 @@ Cylinder::~Cylinder()
         glDeleteBuffers(1, &TBO);
     }
 }
+
+void Cylinder::drawShadow(Shader* shader, glm::mat4 model) {
+    shader->setMat4("model", model);
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, nullptr);
+    glBindVertexArray(0);
+}

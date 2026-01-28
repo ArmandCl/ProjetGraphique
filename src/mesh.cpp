@@ -59,6 +59,7 @@ void Mesh::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::m
 }
 
 void Mesh::drawShadow(Shader* shader, glm::mat4 model) {
+    if (!cast_shadow) return;
     shader->setMat4("model", model);
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);

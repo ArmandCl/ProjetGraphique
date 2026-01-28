@@ -130,3 +130,10 @@ void Rectangle::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, g
 
     if(isTransparent) glDepthMask(GL_TRUE);
 }
+
+void Rectangle::drawShadow(Shader* shader, glm::mat4 model) {
+    shader->setMat4("model", model);
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, vertex_count, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+}

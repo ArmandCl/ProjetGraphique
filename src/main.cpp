@@ -29,7 +29,15 @@ int main()
 
     // Textures pour la pièce
     Texture* floor_texture = new Texture("textures\\floor.jpg");
+    glBindTexture(GL_TEXTURE_2D, floor_texture->getGLid());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glBindTexture(GL_TEXTURE_2D, 0);
     Texture* wall_texture = new Texture("textures\\wall.jpg");
+    glBindTexture(GL_TEXTURE_2D, wall_texture->getGLid());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glBindTexture(GL_TEXTURE_2D, 0);
     Texture* ceiling_texture = new Texture("textures\\wood.jpg");
     Texture* wood_texture = new Texture("textures\\wood.jpg");
     Texture* computer_texture = new Texture("textures\\black.jpg");
@@ -258,6 +266,7 @@ int main()
     glm::vec3 lc(1.0f, 1.0f, 1.0f);
 
     // 2. Envoyer à tous les objets (Casting nécessaire pour Shape*)
+    lamp->cast_shadow = false;
     lamp->setLight(lp, lc);
     ((Rectangle*)desk_top)->setLight(lp, lc);
     ((Room*)room)->setLight(lp, lc);

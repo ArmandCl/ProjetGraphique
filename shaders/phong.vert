@@ -17,8 +17,14 @@ uniform mat4 lightSpaceMatrix;
 
 void main()
 {
+<<<<<<< Updated upstream
 
     LightPos = vec3(view * vec4(lightPos, 1.0)); 
+=======
+    // Attention : lightPos est déjà en World Space dans le C++, pas besoin de multiplier par 'view'
+    // Si tes ombres sont bizarres, essaie : LightPos = lightPos;
+    LightPos = lightPos; 
+>>>>>>> Stashed changes
 
     FragPos = vec3(model * vec4(aPos, 1.0));
     Normal = mat3(transpose(inverse(model))) * aNormal;  
