@@ -9,12 +9,18 @@
 #include <algorithm>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 Texture::Texture(const std::string& tex_file, GLenum wrap_mode, GLenum min_filter, GLenum mag_filter)
     : glid_(0)
 {
+    // --- CORRECTION : Inverser l'image au chargement ---
+    // Blender place l'origine (0,0) en bas à gauche, OpenGL en haut à gauche.
+    // Cette fonction harmonise les deux.
+    stbi_set_flip_vertically_on_load(true); 
+
     glGenTextures(1, &glid_);
     glBindTexture(GL_TEXTURE_2D, glid_);
 
@@ -34,6 +40,7 @@ Texture::Texture(const std::string& tex_file, GLenum wrap_mode, GLenum min_filte
     } else if (num_channels == 4) {
         format = GL_RGBA;
     } else {
+        stbi_image_free(data); // Libérer la mémoire avant de lancer l'exception
         std::cerr << "Unknown texture format: " << num_channels << " channels" << std::endl;
         throw std::runtime_error("Unknown texture format");
     }
@@ -60,4 +67,3 @@ Texture::Texture(const std::string& tex_file, GLenum wrap_mode, GLenum min_filte
 Texture::~Texture() {
     glDeleteTextures(1, &glid_);
 }
-

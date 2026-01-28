@@ -33,7 +33,7 @@ int main()
     Texture* ceiling_texture = new Texture("textures\\wood.jpg");
     Texture* wood_texture = new Texture("textures\\wood.jpg");
     Texture* computer_texture = new Texture("textures\\black.jpg");
-    //Texture* lit_texture = new Texture("textures\\white_sheet2.jpg");
+    Texture* lit_texture = new Texture("textures\\Lit_Atlas.png");
     Texture* framed_texture = new Texture("textures\\framed.jpeg");
 
     // Texture métal pour les pieds
@@ -161,7 +161,7 @@ int main()
     Mesh* fan3_computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cylinder.003");
 
     Mesh* keyboard = new Mesh(phong_texture_shader, "models\\keyboard.obj", computer_texture);
-    Mesh* lit = new Mesh(phong_texture_shader, "models\\lit.obj", wood_texture);
+    Mesh* lit = new Mesh(phong_texture_shader, "models\\lit.obj", lit_texture);
     Mesh* monitor = new Mesh(phong_texture_shader, "models\\monitor.obj", computer_texture);
     Mesh* mouse = new Mesh(phong_texture_shader, "models\\mouse.obj", computer_texture);
 
