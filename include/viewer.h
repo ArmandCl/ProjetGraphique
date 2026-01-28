@@ -47,6 +47,10 @@ private:
     GLFWwindow* win;
     int window_width;
     int window_height;
+    GLuint depthMapFBO;
+    GLuint depthMap;
+    const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+    Shader* depthShader;
 
     // Variables de cam�ra
     glm::vec3 camera_position;

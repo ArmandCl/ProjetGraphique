@@ -32,13 +32,16 @@ Sphere::Sphere(Shader* shader_program, int sector_count, int stack_count) :
     num_indices = static_cast<unsigned int>(indices.size());
 }
 
-void Sphere::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection)
+// src/sphere.cpp
+
+void Sphere::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap)
 {
     glUseProgram(this->shader_program_);
 
     glBindVertexArray(VAO);  
 
-    Shape::draw(model, view, projection);
+    // --- APPEL CRUCIAL AU PARENT ---
+    Shape::draw(model, view, projection, lightSpaceMatrix, shadowMap);
 
     glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, nullptr);
 }

@@ -49,7 +49,7 @@ void Cylinder::generateVertices()
     vertices.clear();
     indices.clear();
 
-    // Générer les vertices du pourtour
+    // Gï¿½nï¿½rer les vertices du pourtour
     for (int i = 0; i < slices; i++) {
         float theta = 2.0f * glm::pi<float>() * static_cast<float>(i) / static_cast<float>(slices);
         float x = radius * glm::cos(theta);
@@ -62,11 +62,11 @@ void Cylinder::generateVertices()
     vertices.push_back(glm::vec3(0.0f, 0.0f, 0.5f * height));   // Centre haut
     vertices.push_back(glm::vec3(0.0f, 0.0f, -0.5f * height));  // Centre bas
 
-    // Générer les indices (corrigés)
+    // Gï¿½nï¿½rer les indices (corrigï¿½s)
     int center_top = vertices.size() - 2;
     int center_bottom = vertices.size() - 1;
 
-    // Surface latérale
+    // Surface latï¿½rale
     for (int i = 0; i < slices; i++) {
         int next = (i + 1) % slices;
 
@@ -102,14 +102,14 @@ void Cylinder::generateTextureCoordinates()
 {
     tex_coords.clear();
 
-    // Coordonnées pour la surface latérale
+    // Coordonnï¿½es pour la surface latï¿½rale
     for (int i = 0; i <= slices; i++) {
         float u = (float)i / (float)slices;
         tex_coords.push_back(glm::vec2(u, 1.0f)); // Haut
         tex_coords.push_back(glm::vec2(u, 0.0f)); // Bas
     }
 
-    // Coordonnées pour les centres (pour les cercles du haut et du bas)
+    // Coordonnï¿½es pour les centres (pour les cercles du haut et du bas)
     for (int i = 0; i < slices; i++) {
         float angle = 2.0f * glm::pi<float>() * i / slices;
         float u = 0.5f + 0.5f * cos(angle);
@@ -119,7 +119,9 @@ void Cylinder::generateTextureCoordinates()
     }
 }
 
-void Cylinder::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection)
+// src/cylinder.cpp
+
+void Cylinder::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap)
 {
     glUseProgram(this->shader_program_);
 
@@ -131,7 +133,10 @@ void Cylinder::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection)
     }
 
     glBindVertexArray(VAO);
-    Shape::draw(model, view, projection);
+    
+    // --- APPEL CRUCIAL AU PARENT ---
+    Shape::draw(model, view, projection, lightSpaceMatrix, shadowMap);
+    
     glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
 

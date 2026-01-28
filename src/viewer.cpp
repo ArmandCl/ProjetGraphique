@@ -79,6 +79,26 @@ Viewer::Viewer(int width, int height)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
+    // --- INITIALISATION OMBRES ---
+    depthShader = new Shader("shaders/shadow_depth.vert", "shaders/shadow_depth.frag");
+
+    glGenFramebuffers(1, &depthMapFBO);
+    glGenTextures(1, &depthMap);
+    glBindTexture(GL_TEXTURE_2D, depthMap);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
     // Initialisation de la sc�ne
     scene_root = new Node();
 
@@ -142,7 +162,35 @@ void Viewer::run() {
         glm::mat4 view = glm::lookAt(camera_position, camera_position + camera_front, camera_up);
         glm::mat4 projection = glm::perspective(glm::radians(zoom), (float)window_width / (float)window_height, 0.1f, 100.0f);
 
-        scene_root->draw(model, view, projection);
+        // 1. Configuration de la caméra "Lumière"
+        glm::vec3 lightPos(0.0f, 0.7f, -0.875f); // Position de ta lampe (copiée du main.cpp)
+        float near_plane = 0.1f, far_plane = 10.0f;
+        glm::mat4 lightProjection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, near_plane, far_plane);
+        glm::mat4 lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+
+        // --- PASSE 1 : RENDU DE L'OMBRE ---
+        glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+        glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+        depthShader->use();
+        depthShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+        // On appelle une nouvelle méthode drawShadow (à créer plus bas)
+        scene_root->drawShadow(depthShader, glm::mat4(1.0f)); 
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        // --- PASSE 2 : RENDU NORMAL ---
+        glViewport(0, 0, window_width, window_height);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // IMPORTANT : Il faut envoyer la matrice et la texture aux shaders
+        // Note: Idéalement, il faudrait le faire pour chaque Shader utilisé, 
+        // mais ici on suppose que tes objets utilisent "phong_texture_shader"
+        // Tu devras peut-être ajouter une méthode "setShadowMap" à tes Nodes.
+        // Pour l'instant, on dessine la scène normalement :
+        scene_root->draw(model, view, projection, lightSpaceMatrix, depthMap);
 
         glfwSwapBuffers(win);
         glfwPollEvents();

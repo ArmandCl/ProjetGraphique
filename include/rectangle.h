@@ -14,7 +14,7 @@ public:
     void setColor(glm::vec4 color) { object_color = color; }
     virtual ~Rectangle();
 
-    void draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) override;
+    void draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap) override;
     void setLight(glm::vec3 pos, glm::vec3 color) {
         lightPos = pos;
         lightColor = color;

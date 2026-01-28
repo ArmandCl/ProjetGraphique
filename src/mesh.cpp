@@ -39,7 +39,7 @@ Mesh::Mesh(Shader* shader, const char* objPath, Texture* texture, const char* ob
     }
 }
 
-void Mesh::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) {
+void Mesh::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap) {
     glUseProgram(this->shader_program_);
 
     // --- AJOUTE CECI ICI ---
@@ -54,8 +54,15 @@ void Mesh::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) {
     }
 
     glBindVertexArray(VAO);
-    Shape::draw(model, view, projection);
+    Shape::draw(model, view, projection, lightSpaceMatrix, shadowMap);
     glUniform3f(glGetUniformLocation(this->shader_program_, "objectColor"), 1.0f, 1.0f, 1.0f);
+    glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+    glBindVertexArray(0);
+}
+
+void Mesh::drawShadow(Shader* shader, glm::mat4 model) {
+    shader->setMat4("model", model);
+    glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
     glBindVertexArray(0);
 }

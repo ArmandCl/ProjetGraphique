@@ -127,8 +127,12 @@ void Room::initRoom(float width, float height, float depth, float thickness) {
     createPart({ hw, y_limit_bot, z_out, 0,0, hw, y_limit_bot, z_in, 1,0, hw, hh, z_in, 1,1, hw, hh, z_out, 0,1 }, wall_texture_); // Droite
 }
 
-void Room::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) {
+// src/room.cpp
+
+void Room::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap) {
     glUseProgram(this->shader_program_);
+    
+    // Envoi des lumières (spécifique à Room)
     glUniform3f(glGetUniformLocation(this->shader_program_, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
     glUniform3f(glGetUniformLocation(this->shader_program_, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
     
@@ -139,7 +143,10 @@ void Room::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) {
             glUniform1i(glGetUniformLocation(this->shader_program_, "diffuse_map"), 0);
         }
         glBindVertexArray(wall.VAO);
-        Shape::draw(model, view, projection);
+        
+        // --- APPEL AU PARENT DANS LA BOUCLE ---
+        Shape::draw(model, view, projection, lightSpaceMatrix, shadowMap);
+        
         glDrawElements(GL_TRIANGLES, wall.vertex_count, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }

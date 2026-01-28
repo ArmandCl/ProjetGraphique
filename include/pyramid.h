@@ -8,7 +8,7 @@
 class Pyramid : public Shape {
 public:
     Pyramid(Shader *shader_program);
-    void draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection);
+    void draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap) override;
     void key_handler(int key);
     virtual ~Pyramid();
 

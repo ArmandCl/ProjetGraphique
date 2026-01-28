@@ -14,7 +14,7 @@ public:
 
     virtual ~Cylinder();
 
-    void draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) override;
+    void draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap) override;
 
     void setTexture(Texture* texture) { texture_ = texture; has_texture_ = true; }
 

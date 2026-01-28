@@ -25,15 +25,17 @@ Triangle::~Triangle() {
     glDeleteBuffers(1, &VBO);
 }
 
-void Triangle::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection) {
+// src/triangle.cpp
+
+void Triangle::draw(glm::mat4& model, glm::mat4& view, glm::mat4& projection, glm::mat4& lightSpaceMatrix, GLuint shadowMap) {
 
     glUseProgram(this->shader_program_);
 
     glBindVertexArray( VAO );
 
-    Shape::draw(model, view, projection);
+    // --- APPEL CRUCIAL AU PARENT ---
+    Shape::draw(model, view, projection, lightSpaceMatrix, shadowMap);
 
-    /* draw points 0-3 from the currently bound VAO with current in-use shader */
     glDrawArrays( GL_TRIANGLES, 0, 3 );
 }
 
