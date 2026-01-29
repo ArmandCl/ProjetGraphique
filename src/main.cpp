@@ -39,6 +39,7 @@ int main()
     Texture* ceiling_texture = new Texture("textures\\wood.jpg");
     Texture* wood_texture = new Texture("textures\\wood.jpg");
     Texture* computer_texture = new Texture("textures\\black.jpg");
+    Texture* fan_texture = new Texture("textures\\white.jpg");
     Texture* lit_texture = new Texture("textures\\Lit_Atlas.png");
     Texture* framed_texture = new Texture("textures\\csgo_screen.png");
 
@@ -140,9 +141,9 @@ int main()
     Mesh* chevet = new Mesh(phong_texture_shader, "models\\chevet.obj", wood_texture);
 
     Mesh* computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cube");
-    Mesh* fan1_computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cylinder.001");
-    Mesh* fan2_computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cylinder.002");
-    Mesh* fan3_computer = new Mesh(phong_texture_shader, "models\\computer.obj", computer_texture, "Cylinder.003");
+    Mesh* fan1_computer = new Mesh(phong_texture_shader, "models\\computer.obj", fan_texture, "Cylinder.001");
+    Mesh* fan2_computer = new Mesh(phong_texture_shader, "models\\computer.obj", fan_texture, "Cylinder.002");
+    Mesh* fan3_computer = new Mesh(phong_texture_shader, "models\\computer.obj", fan_texture, "Cylinder.003");
 
     Mesh* chair = new Mesh(phong_texture_shader, "models\\chair.obj", computer_texture);
 
@@ -170,8 +171,8 @@ int main()
 
     //integration chair
     glm::mat4 mesh_chair = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.58f, -1.15f))
-        * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)) // Rotation 180° pour faire face au bureau
-        * glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)); // Échelle ajustée (0.1 était souvent trop gros pour les .obj bruts)
+        * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f))
+        * glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f));
 
     Node* mesh_node_chair = new Node(mesh_chair);
     mesh_node_chair->add(chair);
@@ -258,6 +259,9 @@ int main()
     ((Rectangle*)poster)->setLight(lp, lc);
     lit->setLight(lp, lc);
     computer->setLight(lp, lc);
+    fan1_computer->setLight(lp, lc);
+    fan2_computer->setLight(lp, lc);
+    fan3_computer->setLight(lp, lc);
     monitor->setLight(lp, lc);
     keyboard->setLight(lp, lc);
     mouse->setLight(lp, lc);
