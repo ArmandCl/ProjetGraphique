@@ -13,7 +13,7 @@
 
 class Viewer {
 public:
-    Viewer(int width = 1280, int height = 720);
+    Viewer(int width = 1920, int height = 1200);
     ~Viewer();
 
     std::vector<Node*> fan_nodes;

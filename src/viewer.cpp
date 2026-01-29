@@ -188,15 +188,22 @@ void Viewer::framebuffer_size_callback_static(GLFWwindow* window, int width, int
 void Viewer::on_key(int key, int action) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(win, GLFW_TRUE);
+
     if (key == GLFW_KEY_C && action == GLFW_PRESS) {
         is_free_camera = !is_free_camera;
+
         if (is_free_camera) {
+            pitch = glm::degrees(asin(camera_front.y));
+
+            yaw = glm::degrees(atan2(camera_front.z, camera_front.x));
+
             glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             first_mouse = true; 
         } else {
             glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
     }
+
     if (key >= 0 && key < 1024) {
         if (action == GLFW_PRESS) keys[key] = true;
         else if (action == GLFW_RELEASE) keys[key] = false;

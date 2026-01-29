@@ -41,10 +41,8 @@ void Room::initRoom(float width, float height, float depth, float thickness) {
     float hh = height * 0.5f;
     float hd = depth * 0.5f;
 
-    // Le petit décalage pour éviter le glitch de texture (Z-fighting)
     float eps = 0.001f; 
 
-    // On définit le bas du mur
     float y_limit_bot = -hh - thickness;
 
     auto createPart = [&](const std::vector<float>& v, Texture* tex) {
@@ -64,20 +62,16 @@ void Room::initRoom(float width, float height, float depth, float thickness) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, wall.EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
-        // Position (Location 0)
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-        // Texture (Location 1)
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-        // Normale (Location 2)
         glEnableVertexAttribArray(2);
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 
         walls.push_back(wall);
     };
 
-    // --- COORDONNÉES DE TEXTURE (TILING) ---
     float uW = width * 0.5f; 
     float vD = depth * 0.5f; 
     float vH = height * 0.5f; 
